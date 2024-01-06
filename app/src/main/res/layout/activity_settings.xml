@@ -4,144 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/yp_white"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/settings_small_margin"
-    android:paddingEnd="@dimen/small_padding"
-    android:paddingBottom="@dimen/big_margin">
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:backgroundTint="@color/yp_white"
-            android:contentDescription="@string/back_desc"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:src="@drawable/arrow_back" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/settings_toolbar"
+        style="@style/MainToolbar">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/yp_white"
-            android:paddingStart="@dimen/small_padding"
-            android:paddingEnd="@dimen/small_padding"
-            android:paddingTop="@dimen/ultra_small_padding"
-            android:text="@string/settings_title"
-            android:textAlignment="center"
-            android:textColor="@color/yp_black"
-            android:textSize="@dimen/main_text_size" />
+            style="@style/MainToolbarTextView"
+            android:text="@string/settings_title" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/big_margin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingStart="@dimen/margin_16"
+        android:paddingEnd="@dimen/margin_16">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <FrameLayout style="@style/SettingsMenuFrame">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginVertical="@dimen/padding_21"
-                android:text="@string/settings_theme"
-                android:textColor="@color/yp_black"
-                android:textSize="@dimen/small_text_size" />
+                style="@style/SettingsMenuText"
+                android:text="@string/settings_theme" />
 
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginVertical="@dimen/padding_21"
-                android:shadowColor="@color/yp_text_gray"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <FrameLayout style="@style/SettingsMenuFrame">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="@dimen/padding_19"
-                android:layout_marginBottom="@dimen/padding_18"
-                android:text="@string/settings_share"
-                android:textColor="@color/yp_black"
-                android:textSize="@dimen/small_text_size" />
+                style="@style/SettingsMenuText"
+                android:text="@string/settings_share" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="@dimen/padding_19"
-                android:layout_marginBottom="@dimen/padding_18"
+                android:id="@+id/share_button"
+                style="@style/SettingsMenuIcon"
                 android:src="@drawable/share" />
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <FrameLayout style="@style/SettingsMenuFrame">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="@dimen/padding_19"
-                android:layout_marginBottom="@dimen/padding_18"
-                android:text="@string/setting_support"
-                android:textColor="@color/yp_black"
-                android:textSize="@dimen/small_text_size" />
+                style="@style/SettingsMenuText"
+                android:text="@string/setting_support" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="@dimen/padding_19"
-                android:layout_marginBottom="@dimen/padding_18"
+                android:id="@+id/support_button"
+                style="@style/SettingsMenuIcon"
                 android:src="@drawable/support" />
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <FrameLayout style="@style/SettingsMenuFrame">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="@dimen/padding_19"
-                android:layout_marginBottom="@dimen/padding_18"
-                android:text="@string/setting_terms"
-                android:textColor="@color/yp_black"
-                android:textSize="@dimen/small_text_size" />
+                style="@style/SettingsMenuText"
+                android:text="@string/setting_terms" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="@dimen/padding_19"
-                android:layout_marginBottom="@dimen/padding_18"
+                android:id="@+id/offer_button"
+                style="@style/SettingsMenuIcon"
                 android:src="@drawable/arrow_forward" />
 
         </FrameLayout>

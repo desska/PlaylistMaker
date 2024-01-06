@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="padding_19">19dp</dimen>
-    <dimen name="padding_18">18dp</dimen>
-    <dimen name="padding_21">21dp</dimen>
-    <dimen name="main_medium_margin">16dp</dimen>
+    <dimen name="edit_text_round_corner">8dp</dimen>
     <dimen name="main_text_size">22sp</dimen>
     <dimen name="small_text_size">16sp</dimen>
-    <dimen name="settings_small_margin">16dp</dimen>
-    <dimen name="small_padding"> 12dp</dimen>>
-    <dimen name="ultra_small_padding"> 10dp</dimen>
-    <dimen name="big_margin">28dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_12"> 12dp</dimen>>
+    <dimen name="margin_28">28dp</dimen>
+    <dimen name="margin_36">36dp</dimen>
+    <dimen name="font_weight_medium">500</dimen>
 </resources>
