@@ -1,17 +1,19 @@
 package com.practicum.playlistmaker
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.view.isVisible
 
 class SearchActivity : AppCompatActivity() {
 
-    var searchText:String = ""
+    private var searchText:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +31,11 @@ class SearchActivity : AppCompatActivity() {
         val searchEditText = findViewById<EditText>(R.id.search_edit_text)
         val searchButton = findViewById<ImageView>(R.id.search_edit_search_button)
         val clearButton = findViewById<ImageView>(R.id.search_edit_clear_button)
-        searchButton.visibility = View.VISIBLE
-        clearButton.visibility = View.GONE
 
         clearButton.setOnClickListener{
             searchEditText.setText("")
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken , 0)
         }
 
         val watcher = object : TextWatcher {
@@ -43,8 +45,8 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                searchButton.visibility = searchButtonVisibility(s = p0)
-                clearButton.visibility = clearButtonVisibility(s = p0)
+                searchButton.isVisible = true
+                clearButton.isVisible = clearButtonVisibility(s = p0)
 
             }
 
@@ -80,24 +82,14 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    companion object{
+    private fun clearButtonVisibility(s: CharSequence?): Boolean {
+
+        return !s.isNullOrEmpty()
+
+    }
+
+    private companion object{
         const val searchTextKey = "SEARCH_TEXT"
-    }
-
-    private fun searchButtonVisibility(s: CharSequence?): Int {
-
-        return View.VISIBLE
-
-    }
-
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
-
     }
 
 }
