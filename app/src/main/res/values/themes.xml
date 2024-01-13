@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
 
@@ -12,6 +12,7 @@
         <item name="colorOnPrimary">@color/yp_black</item>
         <item name="colorOnSecondary">@color/yp_black</item>
         <item name="colorAccent">@color/yp_blue</item>
+        <item name="customTextColor">@color/yp_gray</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

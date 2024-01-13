@@ -9,7 +9,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_toolbar"
-        style="@style/MainToolbar">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             style="@style/MainToolbarTextView"
