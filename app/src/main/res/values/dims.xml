@@ -7,6 +7,7 @@
     <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_12"> 12dp</dimen>>
     <dimen name="margin_28">28dp</dimen>
+    <dimen name="margin_24">24dp</dimen>
     <dimen name="margin_36">36dp</dimen>
     <dimen name="font_weight_medium">500</dimen>
     <dimen name="track_item_small_text_size">11sp</dimen>

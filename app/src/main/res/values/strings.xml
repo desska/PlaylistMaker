@@ -17,5 +17,8 @@
     <string name="supp_email_address">desska@yandex.ru</string>
     <string name="supp_email_subj">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="supp_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="not_found_error">Ничего не нашлось</string>
+    <string name="connection_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="update_button_header">Обновить</string>
 
 </resources>

@@ -56,4 +56,10 @@
         <item name="android:textSize">@dimen/main_text_size</item>
     </style>
 
+    <style name="searchErrorMsg">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
 </resources>
