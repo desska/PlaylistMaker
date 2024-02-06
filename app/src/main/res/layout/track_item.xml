@@ -9,10 +9,10 @@
 
     <ImageView
         android:id="@+id/track_item_cover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/margin_8"
-        android:paddingStart="@dimen/margin_16"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginVertical="@dimen/margin_8"
+        android:layout_marginStart="@dimen/margin_16"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/track_item"
@@ -24,9 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_36"
+        android:layout_marginStart="@dimen/margin_8"
         android:ellipsize="end"
+        android:maxWidth="280dp"
         android:fontFamily="@font/ys_display_regular"
-        android:lines="1"
         android:maxLines="1"
         android:textColor="?attr/colorOnSecondary"
         android:textFontWeight="400"
@@ -35,12 +36,13 @@
         app:layout_constraintLeft_toRightOf="@+id/track_item_cover"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3"
-        tools:text="Smells like teeeeeeeeen speererer" />
+        tools:text="Smells like teeeeeeeeen speerererhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" />
 
     <TextView
         android:id="@+id/track_item_artist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_8"
         android:ellipsize="end"
         android:maxWidth="200dp"
         android:maxLines="1"

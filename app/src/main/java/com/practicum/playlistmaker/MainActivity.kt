@@ -1,3 +1,4 @@
+
 package com.practicum.playlistmaker
 
 import android.content.Intent
@@ -27,6 +28,16 @@ class MainActivity : AppCompatActivity() {
             val settingsIntent = Intent(this, LibraryActivity::class.java)
             startActivity(settingsIntent)
         }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        val sharedPrefs = getSharedPreferences(COMMON_PREFERENCE, MODE_PRIVATE)
+        sharedPrefs.edit()
+            .putBoolean(DARK_THEME_MODE, (applicationContext as App).darkTheme)
+            .apply()
 
     }
 }

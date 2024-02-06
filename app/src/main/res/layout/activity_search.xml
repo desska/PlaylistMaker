@@ -2,8 +2,8 @@
 <LinearLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
@@ -73,24 +73,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:visibility="gone"
         android:layout_marginTop="104dp"
+        android:visibility="gone"
         tools:src="@drawable/connection_error"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/search_msg_text"
-        style="@style/searchErrorMsg"
-        android:gravity="center"
-        android:layout_gravity="center"
+        style="@style/searchMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/margin_24"
         android:layout_marginTop="@dimen/margin_16"
         android:layout_marginBottom="@dimen/margin_24"
-        android:layout_marginHorizontal="@dimen/margin_24"
-        tools:visibility="visible"
-        tools:text="@string/not_found_error"/>
+        android:gravity="center"
+        android:visibility="gone"
+        tools:text="@string/not_found_error"
+        tools:visibility="visible" />
 
     <android.widget.Button
         android:id="@+id/search_update_button"
@@ -105,6 +105,56 @@
         android:textColor="?attr/colorSecondary"
         android:textFontWeight="500"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/history_header"
+            style="@style/searchMsg"
+            android:textFontWeight="500"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/margin_24"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginBottom="@dimen/margin_24"
+            android:gravity="center"
+            android:text="@string/history_text_header"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/track_list_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+
+        <android.widget.Button
+            android:id="@+id/clear_history_button"
+            style="@style/additionalSearchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="@dimen/margin_24"
+            android:paddingHorizontal="@dimen/margin_8"
+            android:text="@string/clear_history_button_header"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
 
 </LinearLayout>
+
+

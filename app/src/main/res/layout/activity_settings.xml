@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorSecondary"
     android:orientation="vertical">
 
@@ -25,19 +25,15 @@
         android:paddingStart="@dimen/margin_16"
         android:paddingEnd="@dimen/margin_16">
 
-        <FrameLayout style="@style/SettingsMenuFrame">
-
-            <TextView
-                style="@style/SettingsMenuText"
-                android:text="@string/settings_theme" />
-
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </FrameLayout>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/theme_switcher"
+            style="@style/SettingsMenuText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/theme_switcher_header"
+            app:thumbTint="@color/yp_gray"
+            app:trackTint="@color/yp_white_gray"/>
 
         <FrameLayout style="@style/SettingsMenuFrame">
 

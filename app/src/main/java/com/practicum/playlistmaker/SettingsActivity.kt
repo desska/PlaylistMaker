@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +20,16 @@ class SettingsActivity : AppCompatActivity() {
 
         toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        val darkTheme = (applicationContext as App).darkTheme
+
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+        themeSwitcher.isChecked = darkTheme
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+
+            (applicationContext as App).switchTheme(checked)
+
         }
 
         val shareButton = findViewById<ImageView>(R.id.share_button)
