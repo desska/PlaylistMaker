@@ -13,6 +13,7 @@
         <item name="colorOnSecondary">@color/yp_black</item>
         <item name="colorAccent">@color/yp_blue</item>
         <item name="customTextColor">@color/yp_gray</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

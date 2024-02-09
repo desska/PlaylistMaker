@@ -1,4 +1,3 @@
-
 package com.practicum.playlistmaker
 
 import android.app.Application
@@ -7,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 const val COMMON_PREFERENCE = "COMMON_PREFERENCE"
 const val DARK_THEME_MODE = "dark_theme_mode"
 
-class App: Application() {
+class App : Application() {
 
     var darkTheme = false
 
@@ -25,8 +24,13 @@ class App: Application() {
 
         darkTheme = darkThemeEnabled
 
+        val sharedPrefs = getSharedPreferences(COMMON_PREFERENCE, MODE_PRIVATE)
+        sharedPrefs.edit()
+            .putBoolean(DARK_THEME_MODE, darkTheme)
+            .apply()
+
         AppCompatDelegate.setDefaultNightMode(
-            if(darkThemeEnabled) {
+            if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
             } else {
                 AppCompatDelegate.MODE_NIGHT_NO

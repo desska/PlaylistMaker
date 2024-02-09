@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/yp_white</item>
         <item name="colorAccent">@color/yp_blue</item>
         <item name="customTextColor">@color/yp_white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
 
     </style>
 </resources>

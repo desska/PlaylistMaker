@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -37,8 +36,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
 
-    private lateinit var trackList: MutableList<Track>
-    private lateinit var trackHistoryList: MutableList<Track>
+    private var trackList = mutableListOf<Track>()
+    private var trackHistoryList = mutableListOf<Track>()
 
     private lateinit var msgImgView: ImageView
     private lateinit var msgTxtView: TextView
@@ -134,6 +133,9 @@ class SearchActivity : AppCompatActivity() {
 
                 searchButton.isVisible = true
                 clearButton.isVisible = clearButtonVisibility(s = p0)
+
+                if(p0?.isEmpty() == true) trackAdapter.clear()
+
                 val isHistoryVisible = isHistoryVisible(
                     searchEditText.hasFocus(),
                     p0?.isEmpty() == true,

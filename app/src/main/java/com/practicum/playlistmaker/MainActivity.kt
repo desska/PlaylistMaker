@@ -31,13 +31,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onStop() {
-        super.onStop()
-
-        val sharedPrefs = getSharedPreferences(COMMON_PREFERENCE, MODE_PRIVATE)
-        sharedPrefs.edit()
-            .putBoolean(DARK_THEME_MODE, (applicationContext as App).darkTheme)
-            .apply()
-
-    }
 }
