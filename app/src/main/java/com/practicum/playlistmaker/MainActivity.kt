@@ -1,3 +1,4 @@
+
 package com.practicum.playlistmaker
 
 import android.content.Intent
@@ -29,4 +30,5 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 }

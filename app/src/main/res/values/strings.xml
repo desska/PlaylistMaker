@@ -20,5 +20,8 @@
     <string name="not_found_error">Ничего не нашлось</string>
     <string name="connection_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update_button_header">Обновить</string>
+    <string name="clear_history_button_header">Очистить историю</string>
+    <string name="history_text_header">Вы искали</string>
+    <string name="theme_switcher_header">Темная тема</string>
 
 </resources>

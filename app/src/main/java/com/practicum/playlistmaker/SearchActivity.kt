@@ -23,9 +23,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-    private val trackList = ArrayList<Track>()
-    private val trackAdapter = TrackAdapter(trackList)
-
     private var searchText: String = ""
     private val itunesUrl = "https://itunes.apple.com"
 
@@ -36,19 +33,43 @@ class SearchActivity : AppCompatActivity() {
 
     private val itunesService = retrofit.create(ItunesService::class.java)
 
+    private lateinit var trackAdapter: TrackAdapter
+    private lateinit var trackHistoryAdapter: TrackAdapter
+
+    private var trackList = mutableListOf<Track>()
+    private var trackHistoryList = mutableListOf<Track>()
+
     private lateinit var msgImgView: ImageView
     private lateinit var msgTxtView: TextView
+
     private lateinit var updateButtonView: Button
+    private lateinit var clearHistoryButtonView: Button
+    private lateinit var historyHeaderView: TextView
+
 
     private lateinit var trackListView: RecyclerView
+    private lateinit var trackHistoryListView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        val sharedPrefs = getSharedPreferences(COMMON_PREFERENCE, MODE_PRIVATE)
+
+        trackList = arrayListOf()
+        trackHistoryList = SearchHistory.getListFromShared(sharedPrefs).toMutableList()
+
+        trackHistoryAdapter = TrackAdapter(trackHistoryList)
+        val searchHistory = SearchHistory(sharedPrefs, trackHistoryAdapter)
+        trackAdapter = TrackAdapter(trackList, searchHistory)
+
         msgImgView = findViewById(R.id.search_msg_img)
         msgTxtView = findViewById(R.id.search_msg_text)
+        historyHeaderView = findViewById(R.id.history_header)
+
         updateButtonView = findViewById(R.id.search_update_button)
+        clearHistoryButtonView = findViewById(R.id.clear_history_button)
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.search_toolbar)
         setSupportActionBar(toolbar)
@@ -61,12 +82,23 @@ class SearchActivity : AppCompatActivity() {
 
         trackListView = findViewById(R.id.track_list)
 
+        trackHistoryListView = findViewById(R.id.track_list_history)
+
+        setHistoryVisibility(false)
 
         trackListView.adapter = trackAdapter
+        trackHistoryListView.adapter = trackHistoryAdapter
 
         val searchEditText = findViewById<EditText>(R.id.search_edit_text)
         val searchButton = findViewById<ImageView>(R.id.search_edit_search_button)
         val clearButton = findViewById<ImageView>(R.id.search_edit_clear_button)
+
+        clearHistoryButtonView.setOnClickListener {
+
+            searchHistory.clear()
+            setHistoryVisibility(false)
+
+        }
 
         clearButton.setOnClickListener {
 
@@ -82,6 +114,14 @@ class SearchActivity : AppCompatActivity() {
                 trackAdapter.notifyDataSetChanged()
             }
 
+            val isHistoryVisible = isHistoryVisible(
+                hasFocus = true,
+                isSearchTextEmpty = true,
+                isHistoryListEmpty = trackHistoryAdapter.isEmpty()
+            )
+
+            setHistoryVisibility(isHistoryVisible)
+
         }
 
         val watcher = object : TextWatcher {
@@ -93,6 +133,15 @@ class SearchActivity : AppCompatActivity() {
 
                 searchButton.isVisible = true
                 clearButton.isVisible = clearButtonVisibility(s = p0)
+
+                if(p0?.isEmpty() == true) trackAdapter.clear()
+
+                val isHistoryVisible = isHistoryVisible(
+                    searchEditText.hasFocus(),
+                    p0?.isEmpty() == true,
+                    trackHistoryAdapter.isEmpty()
+                )
+                setHistoryVisibility(isHistoryVisible)
 
             }
 
@@ -106,13 +155,20 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(watcher)
 
+        searchEditText.setOnFocusChangeListener { _, hasFocus ->
+
+            val isHistoryVisible =
+                isHistoryVisible(hasFocus, searchText.isEmpty(), trackHistoryAdapter.isEmpty())
+            setHistoryVisibility(isHistoryVisible)
+
+        }
+
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
 
             if (actionId == EditorInfo.IME_ACTION_DONE) {
 
                 update()
 
-                true
             }
 
             false
@@ -154,6 +210,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearMessage()
+        setHistoryVisibility(false)
         updateButtonView.isVisible = false
 
         itunesService.search(searchText)
@@ -172,9 +229,11 @@ class SearchActivity : AppCompatActivity() {
                         if (response.body()?.results?.isNotEmpty() == true) {
 
                             trackList.addAll(response.body()?.results!!)
-                            trackAdapter.notifyDataSetChanged()
+
 
                         }
+
+                        trackAdapter.notifyDataSetChanged()
 
                         if (trackList.isEmpty()) {
 
@@ -211,6 +270,14 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
+    private fun setHistoryVisibility(isVisible: Boolean) {
+
+        historyHeaderView.isVisible = isVisible
+        trackHistoryListView.isVisible = isVisible
+        clearHistoryButtonView.isVisible = isVisible
+
+    }
+
     private fun clearButtonVisibility(s: CharSequence?): Boolean {
 
         return !s.isNullOrEmpty()
@@ -222,6 +289,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showMessage(messageRes: Int, messageTxt: String) {
+
+        setHistoryVisibility(false)
 
         msgImgView.isVisible = true
         msgImgView.setBackgroundResource(messageRes)
@@ -237,6 +306,12 @@ class SearchActivity : AppCompatActivity() {
         msgTxtView.isVisible = false
 
     }
+
+    private fun isHistoryVisible(
+        hasFocus: Boolean,
+        isSearchTextEmpty: Boolean,
+        isHistoryListEmpty: Boolean
+    ) = hasFocus && isSearchTextEmpty && !isHistoryListEmpty
 
 }
 
