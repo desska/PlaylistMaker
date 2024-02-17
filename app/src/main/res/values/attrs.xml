@@ -2,5 +2,5 @@
 <resources>
 
     <attr name="customTextColor" format="reference" />
-
+    <attr name="playerBtnBackgroundColor" format="reference" />
 </resources>

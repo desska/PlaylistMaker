@@ -1,12 +1,20 @@
 package com.practicum.playlistmaker
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 
-class TrackAdapter(val data: MutableList<Track>, private val searchHistory: SearchHistory? = null) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(
+    val data: MutableList<Track>,
+    private val context: Context,
+    private val searchHistory: SearchHistory? = null
+) :
+    RecyclerView.Adapter<TrackViewHolder>() {
 
-     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
 
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
         return TrackViewHolder(view)
@@ -19,13 +27,16 @@ class TrackAdapter(val data: MutableList<Track>, private val searchHistory: Sear
 
         holder.bind(data[position])
 
-        if (searchHistory != null) {
 
-            holder.itemView.setOnClickListener {
-                searchHistory.addTrack(data[position])
-            }
+        holder.itemView.setOnClickListener {
+            val track = data[position]
+            searchHistory?.addTrack(track)
+            val intent = Intent(context, PlayerActivity::class.java)
+            intent.putExtra(PLAYER_TRACKS_KEY, Gson().toJson(track))
+            context.startActivity(intent)
 
         }
+
 
     }
 

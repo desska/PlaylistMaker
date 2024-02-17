@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary"
+    tools:context=".PlayerActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/player_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/player_cover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_24"
+        app:layout_constraintBottom_toTopOf="@id/player_track_name"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toRightOf="@id/left_border"
+        app:layout_constraintRight_toLeftOf="@id/right_border"
+        app:layout_constraintTop_toBottomOf="@id/player_toolbar"
+        tools:src="@drawable/big_cover_placeholder" />
+
+    <TextView
+        android:id="@+id/player_track_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_24"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_display_medium"
+        android:maxLines="1"
+        android:textFontWeight="400"
+        android:textSize="@dimen/player_big_text_size"
+        app:layout_constraintLeft_toRightOf="@id/left_border"
+        app:layout_constraintRight_toLeftOf="@id/right_border"
+        app:layout_constraintTop_toBottomOf="@id/player_cover"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/player_artist_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_12"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_display_medium"
+        android:maxLines="1"
+        android:textFontWeight="400"
+        android:textSize="@dimen/player_medium_text_size"
+        app:layout_constraintLeft_toRightOf="@id/left_border"
+        app:layout_constraintRight_toLeftOf="@id/right_border"
+        app:layout_constraintTop_toBottomOf="@id/player_track_name"
+        tools:text="@tools:sample/lorem/random" />
+
+    <ImageButton
+        android:id="@+id/player_queue_button"
+        android:layout_width="@dimen/player_small_button_size"
+        android:layout_height="@dimen/player_small_button_size"
+        android:background="@drawable/round_button"
+        android:src="@drawable/queue"
+        app:layout_constraintBottom_toBottomOf="@id/player_play_button"
+        app:layout_constraintLeft_toRightOf="@id/left_border"
+        app:layout_constraintTop_toTopOf="@id/player_play_button" />
+
+    <ImageButton
+        android:id="@+id/player_favorite_button"
+        android:layout_width="@dimen/player_small_button_size"
+        android:layout_height="@dimen/player_small_button_size"
+        android:background="@drawable/round_button"
+        android:src="@drawable/favorite"
+        app:layout_constraintBottom_toBottomOf="@id/player_play_button"
+        app:layout_constraintRight_toLeftOf="@id/right_border"
+        app:layout_constraintTop_toTopOf="@id/player_play_button" />
+
+    <ImageButton
+        android:id="@+id/player_play_button"
+        android:layout_width="@dimen/player_big_button_size"
+        android:layout_height="@dimen/player_big_button_size"
+        android:layout_marginTop="@dimen/player_big_button_margin_top"
+        android:background="@drawable/round_button"
+        android:backgroundTint="?attr/colorOnSecondary"
+        android:paddingLeft="@dimen/margin_8"
+        android:scaleType="center"
+        android:src="@drawable/play"
+        app:layout_constraintLeft_toRightOf="@id/left_border"
+        app:layout_constraintRight_toLeftOf="@id/right_border"
+        app:layout_constraintTop_toBottomOf="@id/player_artist_name"
+        app:tint="?attr/colorSecondary" />
+
+    <TextView
+        android:id="@+id/player_elapsed_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_4"
+        android:fontFamily="@font/ys_display_medium"
+        android:gravity="center"
+        android:textColor="?attr/colorOnSecondary"
+        android:textFontWeight="500"
+        android:textSize="@dimen/player_medium_text_size"
+        app:layout_constraintLeft_toRightOf="@id/left_border"
+        app:layout_constraintRight_toLeftOf="@id/right_border"
+        app:layout_constraintTop_toBottomOf="@id/player_play_button"
+        tools:text="0:30" />
+
+
+    <TextView
+        android:id="@+id/time_info_header"
+        style="@style/playerTrackInfoHeaderItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_28"
+        android:paddingVertical="@dimen/margin_8"
+        android:text="@string/track_time"
+        app:layout_constraintBottom_toTopOf="@id/collection_info_header"
+        app:layout_constraintLeft_toRightOf="@id/left_small_border"
+        app:layout_constraintTop_toBottomOf="@id/player_elapsed_time" />
+
+    <TextView
+        android:id="@+id/time_info"
+        style="@style/playerTrackInfoItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/margin_8"
+        app:layout_constraintBottom_toBottomOf="@id/time_info_header"
+        app:layout_constraintRight_toLeftOf="@id/right_small_border"
+        app:layout_constraintTop_toTopOf="@id/time_info_header"
+        tools:text="5:35" />
+
+    <TextView
+        android:id="@+id/collection_info_header"
+        style="@style/playerTrackInfoHeaderItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/margin_8"
+        android:text="@string/track_collection"
+        app:layout_constraintBottom_toTopOf="@id/year_info_header"
+        app:layout_constraintLeft_toRightOf="@id/left_small_border"
+        app:layout_constraintTop_toBottomOf="@id/time_info_header" />
+
+    <TextView
+        android:id="@+id/collection_info"
+        style="@style/playerTrackInfoItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_24"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:maxLines="1"
+        android:paddingVertical="@dimen/margin_8"
+        app:layout_constraintBottom_toBottomOf="@id/collection_info_header"
+        app:layout_constraintLeft_toRightOf="@id/country_info_header"
+        app:layout_constraintRight_toLeftOf="@id/right_small_border"
+        app:layout_constraintTop_toTopOf="@id/collection_info_header"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/year_info_header"
+        style="@style/playerTrackInfoHeaderItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/margin_8"
+        android:text="@string/track_year"
+        app:layout_constraintBottom_toTopOf="@id/genre_info_header"
+        app:layout_constraintLeft_toRightOf="@id/left_small_border"
+        app:layout_constraintTop_toBottomOf="@id/collection_info_header" />
+
+    <TextView
+        android:id="@+id/year_info"
+        style="@style/playerTrackInfoItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/margin_8"
+        app:layout_constraintBottom_toBottomOf="@id/year_info_header"
+        app:layout_constraintRight_toLeftOf="@id/right_small_border"
+        app:layout_constraintTop_toTopOf="@id/year_info_header"
+        tools:text="1965" />
+
+    <TextView
+        android:id="@+id/genre_info_header"
+        style="@style/playerTrackInfoHeaderItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/margin_8"
+        android:text="@string/track_genre"
+        app:layout_constraintBottom_toTopOf="@id/country_info_header"
+        app:layout_constraintLeft_toRightOf="@id/left_small_border"
+        app:layout_constraintTop_toBottomOf="@id/year_info_header" />
+
+    <TextView
+        android:id="@+id/genre_info"
+        style="@style/playerTrackInfoItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_24"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:maxLines="1"
+        android:paddingVertical="@dimen/margin_8"
+        app:layout_constraintBottom_toBottomOf="@id/genre_info_header"
+        app:layout_constraintLeft_toRightOf="@id/genre_info_header"
+        app:layout_constraintRight_toLeftOf="@id/right_small_border"
+        app:layout_constraintTop_toTopOf="@id/genre_info_header"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/country_info_header"
+        style="@style/playerTrackInfoHeaderItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_24"
+        android:paddingVertical="@dimen/margin_8"
+        android:text="@string/track_country"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/left_small_border"
+        app:layout_constraintTop_toBottomOf="@id/genre_info_header" />
+
+    <TextView
+        android:id="@+id/country_info"
+        style="@style/playerTrackInfoItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_24"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:maxLines="1"
+        android:paddingVertical="@dimen/margin_8"
+        app:layout_constraintBottom_toBottomOf="@id/country_info_header"
+        app:layout_constraintLeft_toRightOf="@id/country_info_header"
+        app:layout_constraintRight_toLeftOf="@id/right_small_border"
+        app:layout_constraintTop_toTopOf="@id/country_info_header"
+        tools:text="@tools:sample/lorem/random" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_small_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_small_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_24" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

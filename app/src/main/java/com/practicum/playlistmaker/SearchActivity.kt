@@ -21,6 +21,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+const val PLAYER_TRACKS_KEY = "RECENT_TRACKS"
+
 class SearchActivity : AppCompatActivity() {
 
     private var searchText: String = ""
@@ -60,9 +62,9 @@ class SearchActivity : AppCompatActivity() {
         trackList = arrayListOf()
         trackHistoryList = SearchHistory.getListFromShared(sharedPrefs).toMutableList()
 
-        trackHistoryAdapter = TrackAdapter(trackHistoryList)
+        trackHistoryAdapter = TrackAdapter(trackHistoryList, this)
         val searchHistory = SearchHistory(sharedPrefs, trackHistoryAdapter)
-        trackAdapter = TrackAdapter(trackList, searchHistory)
+        trackAdapter = TrackAdapter(trackList, this, searchHistory)
 
         msgImgView = findViewById(R.id.search_msg_img)
         msgTxtView = findViewById(R.id.search_msg_text)

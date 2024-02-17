@@ -24,4 +24,10 @@
     <string name="history_text_header">Вы искали</string>
     <string name="theme_switcher_header">Темная тема</string>
 
+    <string name="track_time">Длительность</string>
+    <string name="track_collection">Альбом</string>
+    <string name="track_year">Год</string>
+    <string name="track_genre">Жанр</string>
+    <string name="track_country">Страна</string>
+
 </resources>
