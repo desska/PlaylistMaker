@@ -14,6 +14,7 @@
         <item name="colorAccent">@color/yp_blue</item>
         <item name="customTextColor">@color/yp_gray</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="playerBtnBackgroundColor">@color/yp_gray</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

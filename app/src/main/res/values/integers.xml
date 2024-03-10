@@ -2,5 +2,6 @@
 <resources>
 
     <integer name="track_cover_corner">2</integer>
+    <integer name="track_big_cover_corner">8</integer>
 
 </resources>
