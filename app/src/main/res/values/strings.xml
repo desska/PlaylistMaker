@@ -29,5 +29,7 @@
     <string name="track_year">Год</string>
     <string name="track_genre">Жанр</string>
     <string name="track_country">Страна</string>
+    <string name="track_sample_time">0:30</string>
+    <string name="track_null_time">00:00</string>
 
 </resources>

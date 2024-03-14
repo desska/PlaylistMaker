@@ -43,6 +43,8 @@
             android:singleLine="true"
             android:textColor="@color/yp_black"
             android:textColorHint="?attr/colorSecondaryVariant" />
+        
+
 
         <ImageView
             android:id="@+id/search_edit_search_button"
@@ -67,6 +69,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
+        android:indeterminateTint="@color/yp_purple"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <ImageView
         android:id="@+id/search_msg_img"
