@@ -2,19 +2,20 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +28,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchText: String = ""
     private val itunesUrl = "https://itunes.apple.com"
+    private var isClickAllowed = true
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesUrl)
@@ -34,6 +36,7 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val itunesService = retrofit.create(ItunesService::class.java)
+    private lateinit var handler: Handler
 
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
@@ -41,37 +44,49 @@ class SearchActivity : AppCompatActivity() {
     private var trackList = mutableListOf<Track>()
     private var trackHistoryList = mutableListOf<Track>()
 
-    private lateinit var msgImgView: ImageView
-    private lateinit var msgTxtView: TextView
-
-    private lateinit var updateButtonView: Button
-    private lateinit var clearHistoryButtonView: Button
-    private lateinit var historyHeaderView: TextView
-
-
-    private lateinit var trackListView: RecyclerView
-    private lateinit var trackHistoryListView: RecyclerView
+    private lateinit var binding: ActivitySearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        handler = Handler(Looper.getMainLooper())
 
         val sharedPrefs = getSharedPreferences(COMMON_PREFERENCE, MODE_PRIVATE)
 
         trackList = arrayListOf()
         trackHistoryList = SearchHistory.getListFromShared(sharedPrefs).toMutableList()
 
-        trackHistoryAdapter = TrackAdapter(trackHistoryList, this)
+        val onTrackHistoryListener = { track: Track ->
+
+            if (clickDebounce()) {
+
+                val intent = Intent(this, PlayerActivity::class.java)
+                intent.putExtra(PLAYER_TRACKS_KEY, track)
+                this.startActivity(intent)
+            }
+        }
+
+        trackHistoryAdapter = TrackAdapter(trackHistoryList, onTrackHistoryListener)
+
         val searchHistory = SearchHistory(sharedPrefs, trackHistoryAdapter)
-        trackAdapter = TrackAdapter(trackList, this, searchHistory)
 
-        msgImgView = findViewById(R.id.search_msg_img)
-        msgTxtView = findViewById(R.id.search_msg_text)
-        historyHeaderView = findViewById(R.id.history_header)
+        val onTrackListener = { track: Track ->
 
-        updateButtonView = findViewById(R.id.search_update_button)
-        clearHistoryButtonView = findViewById(R.id.clear_history_button)
+            if (clickDebounce()) {
+
+                searchHistory.addTrack(track)
+                val intent = Intent(this, PlayerActivity::class.java)
+                intent.putExtra(PLAYER_TRACKS_KEY, track)
+                this.startActivity(intent)
+
+            }
+
+        }
+
+        trackAdapter = TrackAdapter(trackList, onTrackListener)
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.search_toolbar)
         setSupportActionBar(toolbar)
@@ -82,20 +97,16 @@ class SearchActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        trackListView = findViewById(R.id.track_list)
-
-        trackHistoryListView = findViewById(R.id.track_list_history)
-
         setHistoryVisibility(false)
 
-        trackListView.adapter = trackAdapter
-        trackHistoryListView.adapter = trackHistoryAdapter
+        binding.trackList.adapter = trackAdapter
+        binding.trackListHistory.adapter = trackHistoryAdapter
 
         val searchEditText = findViewById<EditText>(R.id.search_edit_text)
         val searchButton = findViewById<ImageView>(R.id.search_edit_search_button)
         val clearButton = findViewById<ImageView>(R.id.search_edit_clear_button)
 
-        clearHistoryButtonView.setOnClickListener {
+        binding.clearHistoryButton.setOnClickListener {
 
             searchHistory.clear()
             setHistoryVisibility(false)
@@ -105,7 +116,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
 
             clearMessage()
-            updateButtonView.isVisible = false
+            binding.searchUpdateButton.isVisible = false
             searchEditText.setText("")
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -136,7 +147,7 @@ class SearchActivity : AppCompatActivity() {
                 searchButton.isVisible = true
                 clearButton.isVisible = clearButtonVisibility(s = p0)
 
-                if(p0?.isEmpty() == true) trackAdapter.clear()
+                if (p0?.isEmpty() == true) trackAdapter.clear()
 
                 val isHistoryVisible = isHistoryVisible(
                     searchEditText.hasFocus(),
@@ -144,6 +155,8 @@ class SearchActivity : AppCompatActivity() {
                     trackHistoryAdapter.isEmpty()
                 )
                 setHistoryVisibility(isHistoryVisible)
+
+                updateDebounce()
 
             }
 
@@ -176,7 +189,7 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        updateButtonView.setOnClickListener {
+        binding.searchUpdateButton.setOnClickListener {
 
             update()
 
@@ -186,7 +199,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
-        outState.putString(searchTextKey, searchText)
+        outState.putString(SEARCH_TEXT_KEY, searchText)
     }
 
     override fun onRestoreInstanceState(
@@ -196,7 +209,7 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
         if (savedInstanceState != null) {
 
-            searchText = savedInstanceState.getString(searchTextKey).toString()
+            searchText = savedInstanceState.getString(SEARCH_TEXT_KEY).toString()
             val editText = findViewById<EditText>(R.id.search_edit_text)
             editText.setText(searchText)
 
@@ -213,7 +226,9 @@ class SearchActivity : AppCompatActivity() {
 
         clearMessage()
         setHistoryVisibility(false)
-        updateButtonView.isVisible = false
+        binding.searchUpdateButton.isVisible = false
+        binding.trackList.isVisible = false
+        binding.progressBar.isVisible = true
 
         itunesService.search(searchText)
             .enqueue(object : Callback<TrackSearchResponse> {
@@ -223,15 +238,15 @@ class SearchActivity : AppCompatActivity() {
                     response: Response<TrackSearchResponse>
                 ) {
 
-
+                    binding.progressBar.isVisible = false
                     if (response.code() == 200) {
 
                         trackList.clear()
 
                         if (response.body()?.results?.isNotEmpty() == true) {
 
+                            binding.trackList.isVisible = true
                             trackList.addAll(response.body()?.results!!)
-
 
                         }
 
@@ -253,7 +268,7 @@ class SearchActivity : AppCompatActivity() {
                             getString(R.string.connection_error)
 
                         )
-                        updateButtonView.isVisible = true
+                        binding.searchUpdateButton.isVisible = true
 
                     }
 
@@ -264,7 +279,7 @@ class SearchActivity : AppCompatActivity() {
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
                     showMessage(R.drawable.connection_error, getString(R.string.connection_error))
-                    updateButtonView.isVisible = true
+                    binding.searchUpdateButton.isVisible = true
                 }
 
 
@@ -274,9 +289,9 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setHistoryVisibility(isVisible: Boolean) {
 
-        historyHeaderView.isVisible = isVisible
-        trackHistoryListView.isVisible = isVisible
-        clearHistoryButtonView.isVisible = isVisible
+        binding.historyHeader.isVisible = isVisible
+        binding.trackListHistory.isVisible = isVisible
+        binding.clearHistoryButton.isVisible = isVisible
 
     }
 
@@ -287,25 +302,27 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private companion object {
-        const val searchTextKey = "SEARCH_TEXT"
+        const val SEARCH_TEXT_KEY = "SEARCH_TEXT"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     private fun showMessage(messageRes: Int, messageTxt: String) {
 
         setHistoryVisibility(false)
 
-        msgImgView.isVisible = true
-        msgImgView.setBackgroundResource(messageRes)
+        binding.searchMsgImg.isVisible = true
+        binding.searchMsgImg.setBackgroundResource(messageRes)
 
-        msgTxtView.isVisible = true
-        msgTxtView.text = messageTxt
+        binding.searchMsgText.isVisible = true
+        binding.searchMsgText.text = messageTxt
 
     }
 
     private fun clearMessage() {
 
-        msgImgView.isVisible = false
-        msgTxtView.isVisible = false
+        binding.searchMsgImg.isVisible = false
+        binding.searchMsgText.isVisible = false
 
     }
 
@@ -314,6 +331,29 @@ class SearchActivity : AppCompatActivity() {
         isSearchTextEmpty: Boolean,
         isHistoryListEmpty: Boolean
     ) = hasFocus && isSearchTextEmpty && !isHistoryListEmpty
+
+    private val updateRunnable = Runnable { update() }
+
+    private fun updateDebounce() {
+
+        handler.removeCallbacks(updateRunnable)
+        handler.postDelayed(updateRunnable, SEARCH_DEBOUNCE_DELAY)
+
+    }
+
+    private fun clickDebounce(): Boolean {
+
+        val current = isClickAllowed
+
+        if (isClickAllowed) {
+
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+
+        }
+
+        return current
+    }
 
 }
 
