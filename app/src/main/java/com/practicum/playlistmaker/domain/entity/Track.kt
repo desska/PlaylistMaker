@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.domain.entity
 
 import java.io.Serializable
 import java.text.SimpleDateFormat
@@ -21,7 +21,7 @@ data class Track(
 ): Serializable {
 
     companion object
-    fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")
+    fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")?: ""
 
     fun getReleaseYear(): String {
 
