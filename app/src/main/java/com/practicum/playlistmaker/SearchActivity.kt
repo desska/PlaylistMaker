@@ -16,6 +16,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.domain.entity.Track
+import com.practicum.playlistmaker.ui.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

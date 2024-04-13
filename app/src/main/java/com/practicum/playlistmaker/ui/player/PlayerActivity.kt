@@ -1,6 +1,5 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.player
 
-import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,22 +7,33 @@ import android.os.Handler
 import android.os.Looper
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.PLAYER_TRACKS_KEY
+import com.practicum.playlistmaker.PlayerState
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.entity.Track
+import com.practicum.playlistmaker.Utils
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.domain.api.PlayerInteractor
+import com.practicum.playlistmaker.presentation.mapper.TrackMapper
+import com.practicum.playlistmaker.presentation.model.TrackInfo
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
+    private val playerInteractor = Creator.providePlayerInteractor()
+
     private lateinit var binding: ActivityPlayerBinding
-    private var player = MediaPlayer()
 
     private lateinit var track: Track
-
+    private lateinit var trackInfo: TrackInfo
     private var handler: Handler? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -31,6 +41,8 @@ class PlayerActivity : AppCompatActivity() {
             intent.getSerializableExtra(PLAYER_TRACKS_KEY, Track::class.java)!!
         else
             intent.getSerializableExtra(PLAYER_TRACKS_KEY) as Track
+
+        trackInfo = TrackMapper.map(track)
 
         handler = Handler(Looper.getMainLooper())
 
@@ -46,7 +58,7 @@ class PlayerActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        updateFromTrack(track)
+        updateFromTrack(trackInfo)
         preparePlayer()
 
         binding.playButton.setOnClickListener { playbackControl() }
@@ -54,15 +66,17 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+
         super.onDestroy()
 
-        if (playerState != STATE_URL_ERROR) {
+        if (playerInteractor.getState() != PlayerState.STATE_URL_ERROR) {
 
             handler?.removeCallbacks(updater)
-            player.release()
+
 
         }
 
+        playerInteractor.release()
 
     }
 
@@ -73,42 +87,29 @@ class PlayerActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val STATE_URL_ERROR = 4
         private const val REFRESH_TIME_MS = 300L
 
     }
 
-    private var playerState = STATE_DEFAULT
-
     private fun preparePlayer() {
 
-        if ((track.previewUrl == "") || (track.previewUrl == null)) {
+        playerInteractor.prepare(trackInfo.previewUrl, object : PlayerInteractor.OnPreparedListener {
 
-            playerState = STATE_URL_ERROR
-            return
-        }
+            override fun onPrepared() {
 
-        player.setDataSource(track.previewUrl)
-        player.prepareAsync()
-        player.setOnPreparedListener {
+                binding.playButton.isEnabled = true
 
-            binding.playButton.isEnabled = true
-            playerState = STATE_PREPARED
+            }
 
-        }
+            override fun onComplete() {
 
-        player.setOnCompletionListener {
+                binding.playButton.setImageResource(R.drawable.play_button)
+                handler?.removeCallbacks(updater)
+                binding.playerElapsedTime.text = getString(R.string.track_null_time)
 
-            binding.playButton.setImageResource(R.drawable.play_button)
-            playerState = STATE_PREPARED
-            handler?.removeCallbacks(updater)
-            binding.playerElapsedTime.text = getString(R.string.track_null_time)
+            }
 
-        }
+        })
 
     }
 
@@ -116,7 +117,7 @@ class PlayerActivity : AppCompatActivity() {
 
         override fun run() {
 
-            val pos = player.currentPosition
+            val pos = playerInteractor.getCurrentPosition()
             binding.playerElapsedTime.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(pos)
             handler?.postDelayed(this, REFRESH_TIME_MS)
@@ -127,15 +128,14 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun startPlayer() {
 
-        if (playerState == STATE_URL_ERROR) {
+        if (playerInteractor.getState() == PlayerState.STATE_URL_ERROR) {
 
             return
 
         }
 
-        player.start()
+        playerInteractor.start()
         binding.playButton.setImageResource(R.drawable.pause_button)
-        playerState = STATE_PLAYING
 
         handler?.postDelayed(
 
@@ -148,15 +148,14 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun pausePlayer() {
 
-        if (playerState == STATE_URL_ERROR) {
+        if (playerInteractor.getState() == PlayerState.STATE_URL_ERROR) {
 
             return
 
         }
 
-        player.pause()
+        playerInteractor.pause()
         binding.playButton.setImageResource(R.drawable.play_button)
-        playerState = STATE_PAUSED
         handler?.removeCallbacks(updater)
 
 
@@ -164,40 +163,39 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun playbackControl() {
 
-        when (playerState) {
+        when (playerInteractor.getState()) {
 
-            STATE_PLAYING -> {
+            PlayerState.STATE_PLAYING -> {
 
                 pausePlayer()
 
             }
 
-            STATE_PAUSED, STATE_PREPARED -> {
+            PlayerState.STATE_PAUSED, PlayerState.STATE_PREPARED -> {
 
                 startPlayer()
 
             }
 
+            else -> {}
         }
 
 
     }
 
-    private fun updateFromTrack(track: Track) {
+    private fun updateFromTrack(track: TrackInfo) {
 
         binding.playerTrackName.text = track.trackName
         binding.playerArtistName.text = track.artistName
-        binding.timeInfo.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
-                .trimStart('0')
+        binding.timeInfo.text = track.trackTime
         binding.collectionInfo.text = track.collectionName
-        binding.yearInfo.text = track.getReleaseYear()
+        binding.yearInfo.text = track.releaseYear
         binding.genreInfo.text = track.primaryGenreName
         binding.countryInfo.text = track.country
         binding.playerElapsedTime.text = getString(R.string.track_sample_time)
 
         Glide.with(binding.playerCover)
-            .load(track.getCoverArtwork())
+            .load(track.coverArtwork)
             .centerCrop()
             .transform(
                 RoundedCorners(
