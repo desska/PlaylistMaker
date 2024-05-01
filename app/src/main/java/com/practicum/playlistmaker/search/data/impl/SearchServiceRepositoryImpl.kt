@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.search.data.impl
 
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.data.entity.ItunesService
-import com.practicum.playlistmaker.search.data.SearchServiceRepository
+import com.practicum.playlistmaker.search.domain.SearchServiceRepository
 import com.practicum.playlistmaker.search.data.entity.TrackSearchResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

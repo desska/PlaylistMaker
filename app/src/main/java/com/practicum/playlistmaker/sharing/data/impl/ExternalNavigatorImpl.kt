@@ -1,13 +1,16 @@
-package com.practicum.playlistmaker.settings.data.impl
+package com.practicum.playlistmaker.sharing.data.impl
 
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.settings.domain.entity.EmailData
+import com.practicum.playlistmaker.sharing.domain.ExternalNavigator
 
-class ExternalNavigator(val context: Context) {
+class ExternalNavigatorImpl(val context: Context): ExternalNavigator {
 
-    fun share(text: String) {
+    override fun share(text: String) {
 
         val intent = Intent().apply {
 
@@ -23,7 +26,7 @@ class ExternalNavigator(val context: Context) {
         }
     }
 
-    fun openUrl(url: String) {
+    override fun openUrl(url: String) {
 
         val intent = Intent().apply {
 
@@ -40,7 +43,7 @@ class ExternalNavigator(val context: Context) {
 
     }
 
-    fun sendEmail(address: String, subj: String, text: String) {
+    override fun sendEmail(address: String, subj: String, text: String) {
 
         val intent = Intent().apply {
 
@@ -58,5 +61,15 @@ class ExternalNavigator(val context: Context) {
         }
 
     }
+
+    override fun getShareUrl(): String = context.getString(R.string.app_url)
+
+    override fun getSupportData(): EmailData = EmailData(
+        context.getString(R.string.supp_email_address),
+        context.getString(R.string.supp_email_subj),
+        context.getString(R.string.supp_email_text)
+    )
+
+    override fun getOpenUrl(): String = context.getString(R.string.app_url)
 
 }

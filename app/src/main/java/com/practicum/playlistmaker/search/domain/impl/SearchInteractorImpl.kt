@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.search.domain.impl
 
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.search.data.SearchServiceRepository
+import com.practicum.playlistmaker.search.domain.SearchServiceRepository
 import com.practicum.playlistmaker.search.domain.SearchInteractor
 import com.practicum.playlistmaker.search.domain.entity.Consumer
 import com.practicum.playlistmaker.search.domain.entity.Resource
@@ -11,7 +11,6 @@ class SearchInteractorImpl(private val searchServiceRepository: SearchServiceRep
     SearchInteractor {
 
     override fun search(song: String, consumer: Consumer<List<Track>>) {
-
 
         val executor = Executors.newCachedThreadPool()
 
@@ -29,7 +28,6 @@ class SearchInteractorImpl(private val searchServiceRepository: SearchServiceRep
 
 
             }
-
 
         }
     }
@@ -52,16 +50,3 @@ class SearchInteractorImpl(private val searchServiceRepository: SearchServiceRep
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
