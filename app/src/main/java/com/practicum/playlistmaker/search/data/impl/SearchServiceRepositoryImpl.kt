@@ -4,21 +4,14 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.data.entity.ItunesService
 import com.practicum.playlistmaker.search.domain.SearchServiceRepository
 import com.practicum.playlistmaker.search.data.entity.TrackSearchResponse
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.practicum.playlistmaker.search.domain.HistoryLocalStorage
 import java.lang.Exception
 
-class SearchServiceRepositoryImpl(val historyLocalStorage: HistoryLocalStorage) :
+class SearchServiceRepositoryImpl(
+    private val historyLocalStorage: HistoryLocalStorage,
+    private val itunesService: ItunesService
+) :
     SearchServiceRepository {
-
-    private val itunesUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunesService = retrofit.create(ItunesService::class.java)
 
     override fun search(song: String): TrackSearchResponse {
 

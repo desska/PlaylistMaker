@@ -8,11 +8,14 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.settings.domain.entity.EmailData
 import com.practicum.playlistmaker.sharing.domain.ExternalNavigator
 
-class ExternalNavigatorImpl(val context: Context): ExternalNavigator {
+class ExternalNavigatorImpl(val context: Context) : ExternalNavigator {
 
     override fun share(text: String) {
 
-        val intent = Intent().apply {
+        val intent = Intent()
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        intent.apply {
 
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, text)
@@ -28,7 +31,10 @@ class ExternalNavigatorImpl(val context: Context): ExternalNavigator {
 
     override fun openUrl(url: String) {
 
-        val intent = Intent().apply {
+        val intent = Intent()
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        intent.apply {
 
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, url)
@@ -45,7 +51,10 @@ class ExternalNavigatorImpl(val context: Context): ExternalNavigator {
 
     override fun sendEmail(address: String, subj: String, text: String) {
 
-        val intent = Intent().apply {
+        val intent = Intent()
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        intent.apply {
 
             action = Intent.ACTION_SENDTO
             data = Uri.parse("mailto:")

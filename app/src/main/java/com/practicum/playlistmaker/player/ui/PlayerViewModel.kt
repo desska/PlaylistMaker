@@ -5,7 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.PlayerState
 import com.practicum.playlistmaker.player.domain.entity.Track
@@ -138,19 +137,6 @@ class PlayerViewModel(track: Track, private val playerInteractor: PlayerInteract
 
         private const val REFRESH_TIME_MS = 300L
 
-        fun getViewModelFactory(track: Track, interactor: PlayerInteractor): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return PlayerViewModel(
-                        track, interactor
-                    ) as T
-
-                }
-
-            }
     }
-
 
 }

@@ -4,13 +4,15 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.player.domain.entity.Track
+import com.practicum.playlistmaker.search.domain.HistoryLocalStorage
 import java.lang.reflect.Type
 
-class HistoryLocalStorage(
+class HistoryLocalStorageImpl(
     private val sharedPreference: SharedPreferences,
-) {
+    private val gson: Gson
+) : HistoryLocalStorage {
 
-    fun add(track: Track) {
+    override fun add(track: Track) {
 
         val list: MutableList<Track> = get()
         val index = list.indexOfFirst { it.trackId == track.trackId }
@@ -31,16 +33,16 @@ class HistoryLocalStorage(
 
     }
 
-    fun clear() {
+    override fun clear() {
         put(listOf())
     }
 
-    fun get(): MutableList<Track> {
+    override fun get(): MutableList<Track> {
 
         val listAsJson = sharedPreference.getString(RECENT_TRACKS_KEY, null)
         val list = if (listAsJson != null) {
             val type: Type = object : TypeToken<MutableList<Track>>() {}.type
-            Gson().fromJson(listAsJson, type)
+            gson.fromJson(listAsJson, type)
 
         } else {
 
@@ -55,7 +57,7 @@ class HistoryLocalStorage(
     private fun put(list: List<Track>) {
 
         sharedPreference.edit()
-            .putString(RECENT_TRACKS_KEY, Gson().toJson(list))
+            .putString(RECENT_TRACKS_KEY, gson.toJson(list))
             .apply()
 
     }

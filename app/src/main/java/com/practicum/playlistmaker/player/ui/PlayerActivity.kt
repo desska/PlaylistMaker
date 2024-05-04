@@ -3,29 +3,31 @@ package com.practicum.playlistmaker.player.ui
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.search.ui.PLAYER_TRACKS_KEY
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.utils.Utils
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.entity.PlayerState
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
-
-    private val playerInteractor = Creator.providePlayerInteractor()
 
     private lateinit var binding: ActivityPlayerBinding
 
     private lateinit var track: Track
     private lateinit var trackInfo: TrackInfo
 
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel: PlayerViewModel by viewModel {
+
+        parametersOf(track)
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -37,12 +39,6 @@ class PlayerActivity : AppCompatActivity() {
             intent.getSerializableExtra(PLAYER_TRACKS_KEY, Track::class.java)!!
         else
             intent.getSerializableExtra(PLAYER_TRACKS_KEY) as Track
-
-
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(track, playerInteractor)
-        )[PlayerViewModel::class.java]
 
         trackInfo = TrackMapper.map(track)
 

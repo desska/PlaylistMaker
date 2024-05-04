@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.settings.domain.impl
 import com.practicum.playlistmaker.settings.domain.SettingsRepository
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 
-class SettingsInteractorImpl(val repository: SettingsRepository): SettingsInteractor {
+class SettingsInteractorImpl(private val repository: SettingsRepository): SettingsInteractor {
 
     override fun getIsDarkTheme(): Boolean {
 

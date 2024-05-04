@@ -13,22 +13,19 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.ui.PlayerActivity
-import com.practicum.playlistmaker.search.domain.SearchInteractor
 import com.practicum.playlistmaker.search.domain.entity.ErrorType
 import com.practicum.playlistmaker.search.domain.entity.SearchState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val PLAYER_TRACKS_KEY = "RECENT_TRACKS"
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var searchInteractor: SearchInteractor
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     private var searchText: String = ""
     private var isClickAllowed = true
@@ -55,16 +52,9 @@ class SearchActivity : AppCompatActivity() {
         val searchButton = binding.searchEditSearchButton
         val clearButton = binding.searchEditClearButton
 
-        searchInteractor = Creator.provideSearchInteractor(this)
-
         toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory(searchInteractor)
-        )[SearchViewModel::class.java]
 
         viewModel.getSearchState().observe(this) { state ->
 
