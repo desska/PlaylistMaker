@@ -23,7 +23,4 @@ class SettingsViewModel(private val sharingInteractor: SharingInteractor, privat
 
     fun onOpenLink() = sharingInteractor.openLink()
 
-    companion object {
-
-    }
 }
