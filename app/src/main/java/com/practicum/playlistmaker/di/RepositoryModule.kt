@@ -9,27 +9,18 @@ import com.practicum.playlistmaker.settings.domain.SettingsRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-
     single<PlayerRepository> {
-
         PlayerRepositoryImpl(get())
-
     }
 
     single<SearchServiceRepository> {
-
         SearchServiceRepositoryImpl(
             get(),
             get()
         )
-
     }
 
     single<SettingsRepository> {
-
         SettingsRepositoryImpl(get(themeQualifier))
-
     }
-
-
 }

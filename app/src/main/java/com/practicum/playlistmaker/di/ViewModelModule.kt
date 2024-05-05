@@ -8,25 +8,15 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModuleModule = module {
-
-    viewModel {
-
-            (track: Track) ->
+    viewModel { (track: Track) ->
         PlayerViewModel(track, get())
-
     }
 
     viewModel {
-
         SearchViewModel(get())
-
     }
 
     viewModel {
-
         SettingsViewModel(get(), get())
-
     }
-
-
 }

@@ -11,28 +11,19 @@ import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 import org.koin.dsl.module
 
 val interactorModule = module {
-
     single<PlayerInteractor> {
-
         PlayerInteractorImpl(get())
-
     }
 
     single<SearchInteractor> {
-
         SearchInteractorImpl(get())
     }
 
     single<SettingsInteractor> {
-
         SettingsInteractorImpl(get())
-
     }
 
     single<SharingInteractor> {
-
         SharingInteractorImpl(get())
-
     }
-
 }

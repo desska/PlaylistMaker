@@ -18,49 +18,34 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val historyQualifier = named("history")
 val themeQualifier = named("theme")
-
 val dataModule = module {
-
     single<ItunesService> {
-
         Retrofit.Builder().baseUrl("https://itunes.apple.com")
             .addConverterFactory(GsonConverterFactory.create()).build()
             .create(ItunesService::class.java)
-
     }
 
     single<HistoryLocalStorage> {
-
         HistoryLocalStorageImpl(get(historyQualifier), get())
-
     }
 
     single<SharedPreferences>(historyQualifier) {
-
         androidContext().getSharedPreferences("local_storage", Context.MODE_PRIVATE)
-
     }
 
     single<SharedPreferences>(themeQualifier) {
-
         androidContext().getSharedPreferences(
             "COMMON_PREFERENCE", Application.MODE_PRIVATE
         )
-
     }
 
     single<ExternalNavigator> {
-
         ExternalNavigatorImpl(androidContext())
-
     }
 
     single {
-
         MediaPlayer()
-
     }
 
     factory { Gson() }
-
 }
