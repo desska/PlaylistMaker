@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.settings.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.sharing.domain.SharingInteractor
 
@@ -24,19 +23,4 @@ class SettingsViewModel(private val sharingInteractor: SharingInteractor, privat
 
     fun onOpenLink() = sharingInteractor.openLink()
 
-    companion object {
-
-        fun getViewModelFactory(sharingInteractor: SharingInteractor, settingsInteractor: SettingsInteractor): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return SettingsViewModel(
-                        sharingInteractor, settingsInteractor
-                    ) as T
-
-                }
-
-            }
-    }
 }

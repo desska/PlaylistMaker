@@ -6,7 +6,6 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.utils.SingleEventLiveData
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.domain.SearchInteractor
@@ -131,18 +130,6 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val HANDLER_TOKEN = Any()
 
-        fun getViewModelFactory(interactor: SearchInteractor): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return SearchViewModel(
-                        interactor
-                    ) as T
-
-                }
-
-            }
     }
 
 }
