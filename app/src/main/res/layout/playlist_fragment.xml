@@ -42,6 +42,8 @@
         android:gravity="center"
         android:visibility="gone"
         tools:text="@string/empty_playlist_error"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:singleLine="false"
+        android:maxWidth="210dp"/>
 
 </LinearLayout>
