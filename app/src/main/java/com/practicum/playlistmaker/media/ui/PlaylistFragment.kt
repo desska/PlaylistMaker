@@ -13,14 +13,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment: Fragment(R.layout.playlist_fragment) {
     private val viewModel: PlaylistViewModel by viewModel<PlaylistViewModel>()
-    private lateinit var binding: PlaylistFragmentBinding
+    private var _binding: PlaylistFragmentBinding? = null
+    private val binding get()  = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = PlaylistFragmentBinding.inflate(inflater, container, false)
+        _binding = PlaylistFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,5 +45,9 @@ class PlaylistFragment: Fragment(R.layout.playlist_fragment) {
         return when (type) {
             PlaylistErrorType.EMPTY_PLAYLIST -> getString(R.string.empty_playlist_error)
         }
+    }
+
+    companion object {
+        fun newInstance() = PlaylistFragment()
     }
 }

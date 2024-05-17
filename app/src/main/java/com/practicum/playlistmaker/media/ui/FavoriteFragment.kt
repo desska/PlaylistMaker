@@ -13,14 +13,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteFragment: Fragment() {
     private val viewModel: FavoriteViewModel by viewModel<FavoriteViewModel>()
-    private lateinit var binding: FavoriteFragmentBinding
+    private var _binding: FavoriteFragmentBinding? = null
+    private val binding get()  = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FavoriteFragmentBinding.inflate(inflater, container, false)
+        _binding = FavoriteFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,5 +45,9 @@ class FavoriteFragment: Fragment() {
         return when (type) {
             FavoriteErrorType.EMPTY_MEDIA -> getString(R.string.empty_media_error)
         }
+    }
+
+    companion object {
+        fun newInstance() = FavoriteFragment()
     }
 }
