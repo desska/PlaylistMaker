@@ -19,11 +19,16 @@
     <string name="supp_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="not_found_error">Ничего не нашлось</string>
     <string name="connection_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="empty_media_error">Ваша медиатека пуста</string>
+    <string name="empty_playlist_error">Вы не создали ни одного плейлиста</string>
     <string name="update_button_header">Обновить</string>
     <string name="clear_history_button_header">Очистить историю</string>
     <string name="history_text_header">Вы искали</string>
     <string name="theme_switcher_header">Темная тема</string>
-
+    <string name="media_title">Медиатека</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="favorite_tracks_page">Избранные треки</string>
+    <string name="playlist_page">Плейлисты</string>
     <string name="track_time">Длительность</string>
     <string name="track_collection">Альбом</string>
     <string name="track_year">Год</string>

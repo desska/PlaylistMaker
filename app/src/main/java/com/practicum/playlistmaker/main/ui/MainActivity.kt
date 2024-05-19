@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import com.practicum.playlistmaker.LibraryActivity
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.media.ui.MediaActivity
 import com.practicum.playlistmaker.search.ui.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         val libraryButton = findViewById<Button>(R.id.library_button)
         libraryButton.setOnClickListener {
-            val settingsIntent = Intent(this, LibraryActivity::class.java)
+            val settingsIntent = Intent(this, MediaActivity::class.java)
             startActivity(settingsIntent)
         }
 
