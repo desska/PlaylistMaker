@@ -35,6 +35,11 @@ class PlaylistFragment: Fragment(R.layout.playlist_fragment) {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     private fun showError(type: PlaylistErrorType) {
         binding.errorMsgImg.isVisible = true
         binding.errorMsgText.isVisible = true
