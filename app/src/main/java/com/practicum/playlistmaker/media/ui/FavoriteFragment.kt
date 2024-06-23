@@ -12,7 +12,7 @@ import com.practicum.playlistmaker.media.domain.entity.FavoriteState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteFragment: Fragment() {
-    private val viewModel: FavoriteViewModel by viewModel<FavoriteViewModel>()
+    private val viewModel: FavoriteViewModel by viewModel()
     private var _binding: FavoriteFragmentBinding? = null
     private val binding get()  = _binding!!
 
@@ -33,6 +33,11 @@ class FavoriteFragment: Fragment() {
                 is FavoriteState.Error -> showError(it.type)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun showError(type: FavoriteErrorType) {
