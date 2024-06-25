@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -11,27 +11,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.content.Context
-import android.content.Intent
-import androidx.core.view.isVisible
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.domain.entity.ErrorType
 import com.practicum.playlistmaker.search.domain.entity.SearchState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val PLAYER_TRACKS_KEY = "RECENT_TRACKS"
 
 class SearchFragment : Fragment() {
+
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
     private var searchText: String = ""
     private var isClickAllowed = true
-    private lateinit var handler: Handler
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
 
@@ -62,14 +63,6 @@ class SearchFragment : Fragment() {
             openTrack(track = it)
         }
 
-        handler = Handler(Looper.getMainLooper())
-        val onTrackHistoryListener = { track: Track ->
-            if (clickDebounce()) {
-                viewModel.onTrackClick(track)
-            }
-        }
-
-        trackHistoryAdapter = TrackAdapter(onTrackHistoryListener)
         val onTrackListener = { track: Track ->
             if (clickDebounce()) {
                 viewModel.addToHistory(track)
@@ -77,7 +70,7 @@ class SearchFragment : Fragment() {
 
             }
         }
-
+        trackHistoryAdapter = TrackAdapter(onTrackListener)
         trackAdapter = TrackAdapter(onTrackListener)
 
         binding.trackList.adapter = trackAdapter
@@ -216,7 +209,6 @@ class SearchFragment : Fragment() {
             }
         }
 
-
     }
 
     private fun setHistoryVisibility(isVisible: Boolean) {
@@ -234,7 +226,6 @@ class SearchFragment : Fragment() {
     private fun clearMessage() {
         binding.searchMsgImg.isVisible = false
         binding.searchMsgText.isVisible = false
-
     }
 
     private fun isHistoryVisible(
@@ -248,8 +239,10 @@ class SearchFragment : Fragment() {
 
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
 
         return current
@@ -296,6 +289,7 @@ class SearchFragment : Fragment() {
     }
 
     private companion object {
+
         const val SEARCH_TEXT_KEY = "SEARCH_TEXT"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
@@ -303,7 +297,6 @@ class SearchFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-
 
     }
 }

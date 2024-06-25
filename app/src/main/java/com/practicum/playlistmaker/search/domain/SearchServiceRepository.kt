@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.search.data.entity.TrackSearchResponse
 
 interface SearchServiceRepository {
 
-    fun search(song: String): TrackSearchResponse
+    suspend fun search(song: String): TrackSearchResponse
 
     fun addToHistory(track: Track)
 
