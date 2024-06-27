@@ -13,7 +13,6 @@ class HistoryLocalStorageImpl(
 ) : HistoryLocalStorage {
 
     override fun add(track: Track) {
-
         val list: MutableList<Track> = get()
         val index = list.indexOfFirst { it.trackId == track.trackId }
 
@@ -24,7 +23,6 @@ class HistoryLocalStorageImpl(
         list.add(0, track)
 
         if (list.size > MAX_TRACKS) {
-
             list.subList(MAX_TRACKS, list.size - 1 + 1).clear()
 
         }
@@ -38,14 +36,12 @@ class HistoryLocalStorageImpl(
     }
 
     override fun get(): MutableList<Track> {
-
         val listAsJson = sharedPreference.getString(RECENT_TRACKS_KEY, null)
         val list = if (listAsJson != null) {
             val type: Type = object : TypeToken<MutableList<Track>>() {}.type
             gson.fromJson(listAsJson, type)
 
         } else {
-
             mutableListOf<Track>()
 
         }
@@ -55,7 +51,6 @@ class HistoryLocalStorageImpl(
     }
 
     private fun put(list: List<Track>) {
-
         sharedPreference.edit()
             .putString(RECENT_TRACKS_KEY, gson.toJson(list))
             .apply()

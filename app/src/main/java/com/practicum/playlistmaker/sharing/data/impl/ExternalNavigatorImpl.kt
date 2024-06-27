@@ -11,12 +11,10 @@ import com.practicum.playlistmaker.sharing.domain.ExternalNavigator
 class ExternalNavigatorImpl(val context: Context) : ExternalNavigator {
 
     override fun share(text: String) {
-
         val intent = Intent()
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         intent.apply {
-
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, text)
             type = "text/plain"
@@ -25,37 +23,26 @@ class ExternalNavigatorImpl(val context: Context) : ExternalNavigator {
         try {
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-
         }
     }
 
     override fun openUrl(url: String) {
-
-        val intent = Intent()
+        val webpage: Uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, webpage)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-        intent.apply {
-
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, url)
-            type = "text/plain"
-        }
 
         try {
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-
         }
 
     }
 
     override fun sendEmail(address: String, subj: String, text: String) {
-
         val intent = Intent()
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         intent.apply {
-
             action = Intent.ACTION_SENDTO
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
@@ -66,7 +53,6 @@ class ExternalNavigatorImpl(val context: Context) : ExternalNavigator {
         try {
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-
         }
 
     }
