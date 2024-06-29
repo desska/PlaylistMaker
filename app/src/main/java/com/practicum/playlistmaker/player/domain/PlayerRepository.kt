@@ -1,8 +1,12 @@
 package com.practicum.playlistmaker.player.domain
 
+import com.practicum.playlistmaker.player.domain.entity.Track
+import kotlinx.coroutines.flow.Flow
+import java.util.Date
+
 interface PlayerRepository {
 
-    interface OnPreparedListener{
+    interface OnPreparedListener {
 
         fun onPrepared()
         fun onComplete()
@@ -17,5 +21,11 @@ interface PlayerRepository {
     fun pause()
 
     fun release()
+
+    suspend fun addToFavorite(track: Track, addDate: Date)
+
+    suspend fun removeFromFavorite(trackId: Int?)
+
+    suspend fun isInFavorite(trackId: Int?): Flow<Boolean>
 
 }

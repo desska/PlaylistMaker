@@ -44,7 +44,6 @@
             android:singleLine="true"
             android:textColor="@color/yp_black"
             android:textColorHint="?attr/colorSecondaryVariant" />
-        
 
 
         <ImageView
@@ -79,7 +78,7 @@
         android:layout_marginTop="200dp"
         android:indeterminateTint="@color/yp_purple"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/search_msg_img"
@@ -123,12 +122,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="70dp">
 
         <TextView
             android:id="@+id/history_header"
             style="@style/searchMsg"
-            android:textFontWeight="500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -137,6 +136,7 @@
             android:layout_marginBottom="@dimen/margin_24"
             android:gravity="center"
             android:text="@string/history_text_header"
+            android:textFontWeight="500"
             android:visibility="gone"
             tools:visibility="visible" />
 

@@ -62,12 +62,10 @@ class SearchFragment : Fragment() {
         viewModel.getTrackClickEvent().observe(viewLifecycleOwner) {
             openTrack(track = it)
         }
-
         val onTrackListener = { track: Track ->
             if (clickDebounce()) {
-                viewModel.addToHistory(track)
                 viewModel.onTrackClick(track)
-
+                viewModel.addToHistory(track)
             }
         }
         trackHistoryAdapter = TrackAdapter(onTrackListener)
@@ -294,9 +292,8 @@ class SearchFragment : Fragment() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
-
     }
 }

@@ -11,7 +11,7 @@ class TrackAdapter(
 ) :
     RecyclerView.Adapter<TrackViewHolder>() {
 
-    private var data: MutableList<Track> = mutableListOf()
+    private val data: MutableList<Track> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)

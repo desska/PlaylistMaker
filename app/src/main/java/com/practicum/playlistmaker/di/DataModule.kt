@@ -4,7 +4,10 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.google.gson.Gson
+import com.practicum.playlistmaker.data.db.AppDatabase
+import com.practicum.playlistmaker.media.data.converters.TrackDbConverter
 import com.practicum.playlistmaker.search.data.entity.ItunesService
 import com.practicum.playlistmaker.search.data.impl.HistoryLocalStorageImpl
 import com.practicum.playlistmaker.search.domain.HistoryLocalStorage
@@ -45,6 +48,10 @@ val dataModule = module {
 
     single {
         MediaPlayer()
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
     }
 
     factory { Gson() }
