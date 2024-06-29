@@ -23,10 +23,10 @@ val viewModuleModule = module {
     }
 
     viewModel {
-        FavoriteViewModel()
+        PlaylistViewModel()
     }
 
     viewModel {
-        PlaylistViewModel()
+        FavoriteViewModel(get())
     }
 }

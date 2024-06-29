@@ -2,12 +2,13 @@ package com.practicum.playlistmaker.player.domain.impl
 
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.PlayerRepository
+import com.practicum.playlistmaker.player.domain.entity.Track
+import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
-class PlayerInteractorImpl(private val playerRepository: PlayerRepository): PlayerInteractor {
-
+class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : PlayerInteractor {
 
     override fun prepare(url: String, listener: PlayerInteractor.OnPreparedListener) {
-
         playerRepository.prepare(url, object : PlayerRepository.OnPreparedListener {
             override fun onPrepared() {
                 listener.onPrepared()
@@ -28,4 +29,16 @@ class PlayerInteractorImpl(private val playerRepository: PlayerRepository): Play
     override fun release() = playerRepository.release()
 
     override fun getCurrentPosition(): Int = playerRepository.getCurrentPosition()
+
+    override suspend fun addToFavorite(track: Track, addDate: Date) {
+        playerRepository.addToFavorite(track, addDate)
+    }
+
+    override suspend fun removeFromFavorite(trackId: Int?) {
+        playerRepository.removeFromFavorite(trackId)
+    }
+
+    override suspend fun isInFavorite(trackId: Int?): Flow<Boolean> {
+        return playerRepository.isInFavorite(trackId)
+    }
 }

@@ -7,11 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.PlayerState
 import com.practicum.playlistmaker.player.domain.entity.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.Date
 
-class PlayerViewModel(track: Track, private val playerInteractor: PlayerInteractor) : ViewModel() {
+class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInteractor) :
+    ViewModel() {
 
     private val playerState = MutableLiveData<PlayerState>(PlayerState.Default)
     fun getPlayerState(): LiveData<PlayerState> = playerState
@@ -19,8 +24,10 @@ class PlayerViewModel(track: Track, private val playerInteractor: PlayerInteract
     private val progress = MutableLiveData(0)
     fun getProgress(): LiveData<Int> = progress
 
-    private var timerJob: Job? = null
+    private val isFavoriteState = MutableLiveData(false)
+    fun getIsFavoriteState(): LiveData<Boolean> = isFavoriteState
 
+    private var timerJob: Job? = null
 
     init {
         val url = track.previewUrl ?: ""
@@ -44,6 +51,12 @@ class PlayerViewModel(track: Track, private val playerInteractor: PlayerInteract
 
         }
 
+        viewModelScope.launch(Dispatchers.IO) {
+            playerInteractor.isInFavorite(track.trackId).collect {
+                isFavoriteState.postValue(it)
+            }
+        }
+
     }
 
     private fun startTimer() {
@@ -59,6 +72,14 @@ class PlayerViewModel(track: Track, private val playerInteractor: PlayerInteract
         super.onCleared()
 
         release()
+    }
+
+    fun toggleFavorite() {
+        if (isFavoriteState.value == false) {
+            addToFavorite()
+        } else {
+            removeFromFavorite()
+        }
     }
 
     fun onPlaybackControl() {
@@ -102,6 +123,21 @@ class PlayerViewModel(track: Track, private val playerInteractor: PlayerInteract
 
         private const val REFRESH_TIME_MS = 300L
 
+    }
+
+    private fun addToFavorite() {
+        viewModelScope.launch(Dispatchers.IO) {
+            playerInteractor.addToFavorite(track = track, Date())
+        }
+        isFavoriteState.postValue(true)
+
+    }
+
+    private fun removeFromFavorite() {
+        viewModelScope.launch(Dispatchers.IO) {
+            playerInteractor.removeFromFavorite(trackId = track.trackId)
+        }
+        isFavoriteState.postValue(false)
     }
 
 }
