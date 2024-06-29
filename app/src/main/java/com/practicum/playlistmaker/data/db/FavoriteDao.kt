@@ -9,10 +9,10 @@ import androidx.room.Query
 interface FavoriteDao {
 
     @Query("SELECT * FROM favorite ORDER BY addDate DESC")
-    fun getAll(): List<TrackEntity>
+    suspend fun getAll(): List<TrackEntity>
 
     @Query("SELECT trackId FROM favorite WHERE trackId = :trackId")
-    fun getOne(trackId: Int): List<Int>
+    suspend fun getOne(trackId: Int): List<Int>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(track: TrackEntity)

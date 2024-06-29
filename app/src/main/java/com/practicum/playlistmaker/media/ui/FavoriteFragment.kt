@@ -15,6 +15,7 @@ import com.practicum.playlistmaker.media.domain.entity.FavoriteState
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.ui.PLAYER_TRACKS_KEY
+import com.practicum.playlistmaker.search.ui.TrackAdapter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,7 +26,7 @@ class FavoriteFragment : Fragment() {
     private var _binding: FavoriteFragmentBinding? = null
     private val binding get() = _binding!!
     private var isClickAllowed = true
-    private lateinit var favoriteAdapter: FavoriteAdapter
+    private lateinit var favoriteAdapter: TrackAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -45,7 +46,7 @@ class FavoriteFragment : Fragment() {
 
         viewModel.fillData()
 
-        favoriteAdapter = FavoriteAdapter(onTrackListener)
+        favoriteAdapter = TrackAdapter(onTrackListener)
         binding.trackList.adapter = favoriteAdapter
 
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -68,8 +69,8 @@ class FavoriteFragment : Fragment() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

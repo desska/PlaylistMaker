@@ -31,7 +31,7 @@ class FavoriteViewModel(private val favoriteInteractor: FavoriteInteractor) : Vi
     }
 
     fun fillData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             favoriteInteractor.getFavorite()
                 .collect {
                     process(it)

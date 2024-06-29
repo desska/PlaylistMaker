@@ -35,8 +35,8 @@ class PlaylistFragment: Fragment(R.layout.playlist_fragment) {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

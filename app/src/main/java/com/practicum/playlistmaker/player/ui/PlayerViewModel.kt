@@ -7,12 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.PlayerState
 import com.practicum.playlistmaker.player.domain.entity.Track
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.Date
 
 class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInteractor) :
@@ -51,7 +48,7 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
 
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             playerInteractor.isInFavorite(track.trackId).collect {
                 isFavoriteState.postValue(it)
             }
@@ -126,7 +123,7 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
     }
 
     private fun addToFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             playerInteractor.addToFavorite(track = track, Date())
         }
         isFavoriteState.postValue(true)
@@ -134,7 +131,7 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
     }
 
     private fun removeFromFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             playerInteractor.removeFromFavorite(trackId = track.trackId)
         }
         isFavoriteState.postValue(false)

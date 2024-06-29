@@ -5,8 +5,10 @@ import com.practicum.playlistmaker.data.db.TrackEntity
 import com.practicum.playlistmaker.media.data.converters.TrackDbConverter
 import com.practicum.playlistmaker.media.domain.FavoriteRepository
 import com.practicum.playlistmaker.player.domain.entity.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class FavoriteRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -18,7 +20,7 @@ class FavoriteRepositoryImpl(
         return flow {
             val tracks = appDatabase.favoriteDao().getAll()
             emit(convertFromTrackEntity(tracks))
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {

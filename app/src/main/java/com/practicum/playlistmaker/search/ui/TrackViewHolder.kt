@@ -18,11 +18,12 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackNameView = itemView.findViewById<TextView>(R.id.track_item_track_name)
     private val artistNameView = itemView.findViewById<TextView>(R.id.track_item_artist_name)
     private val trackTimeView = itemView.findViewById<TextView>(R.id.track_item_track_time)
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     fun bind(item: Track) {
 
         trackNameView.text = item.trackName
         artistNameView.text = item.artistName
-        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+        trackTimeView.text = dateFormat.format(item.trackTimeMillis)
 
         Glide.with(itemView)
             .load(item.artworkUrl100)

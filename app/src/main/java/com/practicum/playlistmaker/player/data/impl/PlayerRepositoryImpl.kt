@@ -5,16 +5,18 @@ import com.practicum.playlistmaker.data.db.AppDatabase
 import com.practicum.playlistmaker.media.data.converters.TrackDbConverter
 import com.practicum.playlistmaker.player.domain.PlayerRepository
 import com.practicum.playlistmaker.player.domain.entity.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import java.util.Date
 
 class PlayerRepositoryImpl(
     private var player: MediaPlayer,
     private val appDatabase: AppDatabase,
     private val trackDbConverter: TrackDbConverter
-) :
-    PlayerRepository {
+) : PlayerRepository {
 
     override fun prepare(url: String, listener: PlayerRepository.OnPreparedListener) {
         player.setDataSource(url)
@@ -38,12 +40,16 @@ class PlayerRepositoryImpl(
     override fun getCurrentPosition(): Int = player.currentPosition
 
     override suspend fun addToFavorite(track: Track, addDate: Date) {
-        appDatabase.favoriteDao().insert(trackDbConverter.map(track, addDate))
+        withContext(Dispatchers.IO) {
+            appDatabase.favoriteDao().insert(trackDbConverter.map(track, addDate))
+        }
     }
 
     override suspend fun removeFromFavorite(trackId: Int?) {
-        if (trackId != null) {
-            appDatabase.favoriteDao().delete(trackId)
+        withContext(Dispatchers.IO) {
+            if (trackId != null) {
+                appDatabase.favoriteDao().delete(trackId)
+            }
         }
     }
 
@@ -55,6 +61,6 @@ class PlayerRepositoryImpl(
             } else {
                 emit(false)
             }
-        }
+        }.flowOn(Dispatchers.IO)
     }
 }
