@@ -19,18 +19,13 @@ import java.util.Locale
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-
     private lateinit var track: Track
     private lateinit var trackInfo: TrackInfo
-
     private val viewModel: PlayerViewModel by viewModel {
-
         parametersOf(track)
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -54,55 +49,48 @@ class PlayerActivity : AppCompatActivity() {
 
         binding.playButton.setOnClickListener { viewModel.onPlaybackControl() }
 
+        binding.playerFavoriteButton.setOnClickListener { viewModel.toggleFavorite() }
 
         viewModel.getPlayerState().observe(this) {
-
             when (it) {
-
                 is PlayerState.Playing -> {
-
                     binding.playButton.setImageResource(R.drawable.pause_button)
 
                 }
 
-
                 is PlayerState.Prepared -> {
-
                     binding.playButton.setImageResource(R.drawable.play_button)
                     binding.playerElapsedTime.text = getString(R.string.track_null_time)
 
                 }
 
-
                 is PlayerState.Paused -> {
-
                     binding.playButton.setImageResource(R.drawable.play_button)
                     binding.playButton.isEnabled = true
 
                 }
 
                 is PlayerState.Error -> {
-
                     binding.playButton.isEnabled = false
 
                 }
 
                 is PlayerState.Default -> {
-
                     binding.playButton.isEnabled = false
                     binding.playButton.setImageResource(R.drawable.play_button)
                 }
 
                 else -> {}
             }
-
-
         }
 
         viewModel.getProgress().observe(this) {
-
             binding.playerElapsedTime.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(it)
+        }
+
+        viewModel.getIsFavoriteState().observe(this) {
+            updateFavoriteButton(it)
         }
 
     }
@@ -113,7 +101,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun updateFromTrack(track: TrackInfo) {
-
         binding.playerTrackName.text = track.trackName
         binding.playerArtistName.text = track.artistName
         binding.timeInfo.text = track.trackTime
@@ -137,6 +124,15 @@ class PlayerActivity : AppCompatActivity() {
             .placeholder(R.drawable.big_cover_placeholder)
             .into(binding.playerCover)
 
+    }
+
+    private fun updateFavoriteButton(isFavorite: Boolean) {
+        val res = if (isFavorite) {
+            R.drawable.favorite_on
+        } else {
+            R.drawable.favorite
+        }
+        binding.playerFavoriteButton.setImageResource(res)
     }
 
 }
