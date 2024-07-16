@@ -4,19 +4,35 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.newlist.domain.entity.Playlist
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
+import com.practicum.playlistmaker.player.domain.entity.BottomSheetState
 import com.practicum.playlistmaker.player.domain.entity.PlayerState
 import com.practicum.playlistmaker.player.domain.entity.Track
+import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
+import com.practicum.playlistmaker.playlist.domain.entity.PlaylistErrorType
+import com.practicum.playlistmaker.playlist.domain.entity.PlaylistState
+import com.practicum.playlistmaker.player.domain.entity.ToastState
+import com.practicum.playlistmaker.utils.SingleEventLiveData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 
-class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInteractor) :
+class PlayerViewModel(
+    val track: Track,
+    private val playerInteractor: PlayerInteractor,
+    private val playlistInteractor: PlaylistInteractor
+) :
     ViewModel() {
+    private val toastState = SingleEventLiveData<ToastState>()
+    fun observeToastState(): LiveData<ToastState> = toastState
+
+    private val bottomSheetState = SingleEventLiveData<BottomSheetState>()
+    fun observeBottomSheetState(): LiveData<BottomSheetState> = bottomSheetState
 
     private val playerState = MutableLiveData<PlayerState>(PlayerState.Default)
-    fun getPlayerState(): LiveData<PlayerState> = playerState
+    fun observePlayerState(): LiveData<PlayerState> = playerState
 
     private val progress = MutableLiveData(0)
     fun getProgress(): LiveData<Int> = progress
@@ -25,6 +41,51 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
     fun getIsFavoriteState(): LiveData<Boolean> = isFavoriteState
 
     private var timerJob: Job? = null
+    private val listState =
+        MutableLiveData<PlaylistState>()
+
+    fun observeListState(): LiveData<PlaylistState> = listState
+
+    fun fillPlaylistData() {
+        viewModelScope.launch {
+            playlistInteractor.getLists()
+                .collect {
+                    process(it)
+                }
+        }
+    }
+
+    private fun process(lists: List<Playlist>) {
+        if (lists.isNotEmpty()) {
+            listState.postValue(PlaylistState.Content(lists))
+        } else {
+            listState.postValue(PlaylistState.Error(PlaylistErrorType.EMPTY_PLAYLIST))
+        }
+    }
+
+    fun onPlaylistClick(playlist: Playlist, trackId: Int?) {
+        addToPlaylist(playlist, trackId)
+    }
+
+    private fun addToPlaylist(playlist: Playlist, trackId: Int?) {
+        if (trackId == null) {
+            return
+        }
+
+        viewModelScope.launch {
+            playerInteractor.isInPlaylist(trackId, playlist.id).collect {
+                if (it) {
+                    toastState.postValue(ToastState.IsInList(playlist.name))
+                } else {
+                    playerInteractor.addToPlaylist(trackId, playlist.id)
+                    toastState.postValue(ToastState.IsAdded(playlist.name))
+                    fillPlaylistData()
+                    hideBottomSheet()
+                }
+            }
+        }
+        fillPlaylistData()
+    }
 
     init {
         val url = track.previewUrl ?: ""
@@ -117,7 +178,6 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
     }
 
     companion object {
-
         private const val REFRESH_TIME_MS = 300L
 
     }
@@ -135,6 +195,18 @@ class PlayerViewModel(val track: Track, private val playerInteractor: PlayerInte
             playerInteractor.removeFromFavorite(trackId = track.trackId)
         }
         isFavoriteState.postValue(false)
+    }
+
+    fun onAddPlaylistClick() {
+        collapseBottomSheet()
+    }
+
+    private fun hideBottomSheet() {
+       bottomSheetState.postValue(BottomSheetState.HIDDEN)
+    }
+
+    private fun collapseBottomSheet() {
+        bottomSheetState.postValue(BottomSheetState.COLLAPSED)
     }
 
 }

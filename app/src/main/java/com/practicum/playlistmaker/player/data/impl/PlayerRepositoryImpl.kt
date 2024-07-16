@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.player.data.impl
 
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.data.db.AppDatabase
-import com.practicum.playlistmaker.media.data.converters.TrackDbConverter
+import com.practicum.playlistmaker.favorite.data.converters.TrackDbConverter
 import com.practicum.playlistmaker.player.domain.PlayerRepository
 import com.practicum.playlistmaker.player.domain.entity.Track
 import kotlinx.coroutines.Dispatchers
@@ -15,9 +15,9 @@ import java.util.Date
 class PlayerRepositoryImpl(
     private var player: MediaPlayer,
     private val appDatabase: AppDatabase,
-    private val trackDbConverter: TrackDbConverter
-) : PlayerRepository {
+    private val trackDbConverter: TrackDbConverter,
 
+) : PlayerRepository {
     override fun prepare(url: String, listener: PlayerRepository.OnPreparedListener) {
         player.setDataSource(url)
         player.prepareAsync()
@@ -63,4 +63,19 @@ class PlayerRepositoryImpl(
             }
         }.flowOn(Dispatchers.IO)
     }
+
+    override suspend fun isInPlaylist(trackId: Int, playlistId: Int): Flow<Boolean> {
+        return flow {
+            val list = appDatabase.PlaylistDao().getTracks(playlistId)
+            emit(list.find { it == trackId } != null)
+        }.flowOn(Dispatchers.IO)
+
+    }
+
+    override suspend fun addToPlaylist(trackId: Int, playlistId: Int) {
+        withContext(Dispatchers.IO) {
+            appDatabase.PlaylistDao().addTrack(trackId, playlistId)
+        }
+    }
+
 }

@@ -8,6 +8,9 @@ android {
     namespace 'com.practicum.playlistmaker'
     compileSdk 34
 
+    dataBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "com.practicum.playlistmaker"
         minSdk 29
@@ -16,6 +19,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildFeatures {

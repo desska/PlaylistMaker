@@ -5,9 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 interface PlayerRepository {
-
     interface OnPreparedListener {
-
         fun onPrepared()
         fun onComplete()
     }
@@ -27,5 +25,9 @@ interface PlayerRepository {
     suspend fun removeFromFavorite(trackId: Int?)
 
     suspend fun isInFavorite(trackId: Int?): Flow<Boolean>
+
+    suspend fun isInPlaylist(trackId: Int, playlistId: Int): Flow<Boolean>
+
+    suspend fun addToPlaylist(trackId: Int, playlistId: Int)
 
 }
