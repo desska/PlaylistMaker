@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -88,9 +87,9 @@ class PlayerFragment : Fragment() {
         binding.newList.setOnClickListener {
             findNavController().navigate(R.id.action_player_to_newList)
         }
-        val onPlaylistListener = { playlist: Playlist, trackId: Int ->
+        val onPlaylistListener = { playlist: Playlist, track: Track ->
             if (clickDebounce()) {
-                viewModel.onPlaylistClick(playlist, trackId)
+                viewModel.onPlaylistClick(playlist, track)
             }
         }
         val configuration = Configuration(this.requireContext().resources.configuration)
@@ -98,7 +97,7 @@ class PlayerFragment : Fragment() {
         val localeContext = this.requireContext().createConfigurationContext(configuration)
 
         playlistAdapter = PlaylistAdapter(
-            localeContext, onPlaylistListener, track.trackId
+            localeContext, onPlaylistListener, track
         )
         binding.playlists.adapter = playlistAdapter
         binding.playlists.layoutManager = LinearLayoutManager(requireContext())
@@ -142,10 +141,10 @@ class PlayerFragment : Fragment() {
 
         viewModel.observeBottomSheetState().observe(this.viewLifecycleOwner) {
             when (it) {
-                is BottomSheetState.HIDDEN -> bottomSheetBehavior.state =
+                is BottomSheetState.Hidden -> bottomSheetBehavior.state =
                     BottomSheetBehavior.STATE_HIDDEN
 
-                is BottomSheetState.COLLAPSED -> bottomSheetBehavior.state =
+                is BottomSheetState.Collapsed -> bottomSheetBehavior.state =
                     BottomSheetBehavior.STATE_COLLAPSED
             }
         }
@@ -214,14 +213,16 @@ class PlayerFragment : Fragment() {
     }
 
     private fun updateFromTrack(track: TrackInfo) {
-        binding.playerTrackName.text = track.trackName
-        binding.playerArtistName.text = track.artistName
-        binding.timeInfo.text = track.trackTime
-        binding.collectionInfo.text = track.collectionName
-        binding.yearInfo.text = track.releaseYear
-        binding.genreInfo.text = track.primaryGenreName
-        binding.countryInfo.text = track.country
-        binding.playerElapsedTime.text = getString(R.string.track_sample_time)
+        with(binding) {
+            playerTrackName.text = track.trackName
+            playerArtistName.text = track.artistName
+            timeInfo.text = track.trackTime
+            collectionInfo.text = track.collectionName
+            yearInfo.text = track.releaseYear
+            genreInfo.text = track.primaryGenreName
+            countryInfo.text = track.country
+            playerElapsedTime.text = getString(R.string.track_sample_time)
+        }
 
         Glide.with(binding.playerCover).load(track.coverArtwork).centerCrop().transform(
             RoundedCorners(
@@ -289,10 +290,6 @@ class PlayerFragment : Fragment() {
         showToast(msg)
     }
 
-    companion object {
-        const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
-
     private fun showCreatedMessage(playlistName: String?) {
         val toast = Toast.makeText(
             context, getString(R.string.playlist_created_message, playlistName), Toast.LENGTH_SHORT
@@ -301,4 +298,7 @@ class PlayerFragment : Fragment() {
 
     }
 
+    companion object {
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
 }

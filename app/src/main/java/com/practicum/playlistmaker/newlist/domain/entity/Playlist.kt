@@ -5,5 +5,5 @@ data class Playlist(
     val name: String = "",
     val description: String = "",
     val cover: String = "",
-    val qty: Int = 0
+    val quantity: Int = 0
 )

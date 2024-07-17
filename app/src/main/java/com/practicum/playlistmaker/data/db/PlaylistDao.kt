@@ -10,11 +10,11 @@ interface PlaylistDao {
     @Query(
         "WITH " +
                 "TrackCount AS (" +
-                " SELECT COUNT(*) AS qty, " +
+                " SELECT COUNT(*) AS quantity, " +
                 " playlistId  FROM track_playlist GROUP BY playlistId" +
                 ") " +
                 "SELECT  id, name, description, cover , " +
-                "CASE WHEN TrackCount.qty IS NULL THEN 0 ELSE TrackCount.qty END AS qty " +
+                "CASE WHEN TrackCount.quantity IS NULL THEN 0 ELSE TrackCount.quantity END AS quantity " +
                 "FROM playlist LEFT JOIN TrackCount ON playlist.id = TrackCount.playlistId"
     )
     suspend fun getLists(): List<PlaylistEntity>

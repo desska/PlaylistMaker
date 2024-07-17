@@ -19,7 +19,7 @@ class PlayListDbConverter {
             name = playlist.name,
             description = playlist.description,
             cover = playlist.cover,
-            qty = playlist.qty
+            quantity = playlist.quantity
         )
     }
 

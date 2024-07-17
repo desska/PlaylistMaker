@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewmodel"
             type="com.practicum.playlistmaker.newlist.ui.NewListViewModel" />
@@ -52,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_32"
             android:hint="@string/new_list_name_hint"
+            android:theme="@style/newListTextInputLayout"
             app:layout_constraintLeft_toRightOf="@id/left_border"
             app:layout_constraintRight_toLeftOf="@id/right_border"
             app:layout_constraintTop_toBottomOf="@id/cover">
@@ -73,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_16"
             android:hint="@string/new_list_description_hint"
+            android:theme="@style/newListTextInputLayout"
             app:layout_constraintLeft_toRightOf="@id/left_border"
             app:layout_constraintRight_toLeftOf="@id/right_border"
             app:layout_constraintTop_toBottomOf="@id/name">
@@ -86,7 +89,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/createButton"
+            android:id="@+id/create_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_32"

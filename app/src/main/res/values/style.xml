@@ -96,7 +96,7 @@
         <item name="hintTextColor">@color/yp_blue</item>
         <item name="boxStrokeWidth">1dp</item>
         <item name="boxStrokeWidthFocused">1dp</item>
-
+        <item name="colorControlActivated">@color/yp_blue</item>
     </style>
 
     <style name="newListTextInput">
@@ -119,11 +119,11 @@
     </style>
 
     <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/yp_purple</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
     <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/yp_purple</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
     <style name="ToolBarStyle" parent="Theme.AppCompat">
@@ -136,4 +136,4 @@
         <item name="color">@android:color/white</item>
     </style>
 
-  </resources>
+</resources>

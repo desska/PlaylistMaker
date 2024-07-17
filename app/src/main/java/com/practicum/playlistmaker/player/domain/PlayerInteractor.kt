@@ -30,5 +30,5 @@ interface PlayerInteractor {
 
     suspend fun isInPlaylist(trackId: Int, playlistId: Int): Flow<Boolean>
 
-    suspend fun addToPlaylist(trackId: Int, playlistId: Int)
+    suspend fun addToPlaylist(track: Track, playlistId: Int)
 }

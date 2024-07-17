@@ -1,12 +1,10 @@
-package com.practicum.playlistmaker.favorite.data.converters
+package com.practicum.playlistmaker.data.db
 
-import com.practicum.playlistmaker.data.db.TrackEntity
 import com.practicum.playlistmaker.player.domain.entity.Track
 import java.util.Date
 
-class TrackDbConverter {
-
-    fun map(track: Track, addDate: Date): TrackEntity {
+open class TrackDbConverter {
+    fun map(track: Track): TrackEntity {
         return TrackEntity(
             trackId = track.trackId ?: -1,
             trackName = track.trackName ?: "",
@@ -18,7 +16,6 @@ class TrackDbConverter {
             country = track.country ?: "",
             previewUrl = track.previewUrl ?: "",
             artworkUrl100 = track.artworkUrl100 ?: "",
-            addDate = addDate,
             trackTimeMillis = track.trackTimeMillis ?: 0
         )
     }

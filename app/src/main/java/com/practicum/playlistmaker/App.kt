@@ -12,7 +12,7 @@ import org.koin.core.context.startKoin
 
 class App : Application() {
 
-    var isDarkTheme = false
+    private var isDarkTheme = false
 
     override fun onCreate() {
         super.onCreate()

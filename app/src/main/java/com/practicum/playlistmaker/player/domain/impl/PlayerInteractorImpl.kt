@@ -45,7 +45,7 @@ class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : Pla
         return playerRepository.isInPlaylist(trackId, playlistId)
     }
 
-    override suspend fun addToPlaylist(trackId: Int, playlistId: Int) {
-        playerRepository.addToPlaylist(trackId, playlistId)
+    override suspend fun addToPlaylist(track: Track, playlistId: Int) {
+        playerRepository.addToPlaylist(track, playlistId)
     }
 }

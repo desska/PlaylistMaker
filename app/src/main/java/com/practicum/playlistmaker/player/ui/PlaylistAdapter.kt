@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.databinding.PlaylistListItemBinding
 import com.practicum.playlistmaker.newlist.domain.entity.Playlist
+import com.practicum.playlistmaker.player.domain.entity.Track
 
 class PlaylistAdapter(
     private val context: Context,
-    private val onClickAction: (Playlist, Int) -> Unit,
-    private val trackId: Int?
+    private val onClickAction: (Playlist, Track) -> Unit,
+    private val track: Track
 ) :
     RecyclerView.Adapter<PlaylistViewHolder>() {
     private val data: MutableList<Playlist> = mutableListOf()
@@ -27,9 +28,9 @@ class PlaylistAdapter(
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         holder.bind(data[position])
-        if (trackId != null) {
+        if (track.trackId != null) {
             holder.itemView.setOnClickListener {
-                onClickAction(data[position], trackId)
+                onClickAction(data[position], track)
             }
         }
 

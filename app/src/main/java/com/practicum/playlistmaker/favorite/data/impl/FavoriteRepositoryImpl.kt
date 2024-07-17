@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker.favorite.data.impl
 
 import com.practicum.playlistmaker.data.db.AppDatabase
-import com.practicum.playlistmaker.data.db.TrackEntity
-import com.practicum.playlistmaker.favorite.data.converters.TrackDbConverter
+import com.practicum.playlistmaker.data.db.FavoriteEntity
+import com.practicum.playlistmaker.favorite.data.converters.FavoriteDbConverter
 import com.practicum.playlistmaker.favorite.domain.FavoriteRepository
 import com.practicum.playlistmaker.player.domain.entity.Track
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class FavoriteRepositoryImpl(
     private val appDatabase: AppDatabase,
-    private val trackDbConverter: TrackDbConverter
+    private val favoriteDbConverter: FavoriteDbConverter
 ) : FavoriteRepository {
 
     override fun getFavorite(
@@ -23,8 +23,8 @@ class FavoriteRepositoryImpl(
         }.flowOn(Dispatchers.IO)
     }
 
-    private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {
-        return tracks.map { track -> trackDbConverter.map(track) }
+    private fun convertFromTrackEntity(tracks: List<FavoriteEntity>): List<Track> {
+        return tracks.map { track -> favoriteDbConverter.map(track) }
     }
 
 }

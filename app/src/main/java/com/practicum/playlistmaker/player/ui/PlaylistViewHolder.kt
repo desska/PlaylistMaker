@@ -15,7 +15,7 @@ class PlaylistViewHolder(
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: Playlist) {
         binding.name.text = item.name
-        binding.qty.text = context.resources.getQuantityString(R.plurals.tracks, item.qty, item.qty)
+        binding.qty.text = context.resources.getQuantityString(R.plurals.tracks, item.quantity, item.quantity)
         if (item.cover.toUri() == Uri.EMPTY) {
             binding.cover.setImageResource(R.drawable.placeholder)
         } else {

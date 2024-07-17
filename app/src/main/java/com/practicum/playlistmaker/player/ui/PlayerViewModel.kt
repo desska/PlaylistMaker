@@ -63,21 +63,21 @@ class PlayerViewModel(
         }
     }
 
-    fun onPlaylistClick(playlist: Playlist, trackId: Int?) {
-        addToPlaylist(playlist, trackId)
+    fun onPlaylistClick(playlist: Playlist, track: Track) {
+        addToPlaylist(playlist, track)
     }
 
-    private fun addToPlaylist(playlist: Playlist, trackId: Int?) {
-        if (trackId == null) {
+    private fun addToPlaylist(playlist: Playlist, track: Track) {
+        if (track.trackId == null) {
             return
         }
 
         viewModelScope.launch {
-            playerInteractor.isInPlaylist(trackId, playlist.id).collect {
+            playerInteractor.isInPlaylist(track.trackId, playlist.id).collect {
                 if (it) {
                     toastState.postValue(ToastState.IsInList(playlist.name))
                 } else {
-                    playerInteractor.addToPlaylist(trackId, playlist.id)
+                    playerInteractor.addToPlaylist(track, playlist.id)
                     toastState.postValue(ToastState.IsAdded(playlist.name))
                     fillPlaylistData()
                     hideBottomSheet()
@@ -202,11 +202,11 @@ class PlayerViewModel(
     }
 
     private fun hideBottomSheet() {
-       bottomSheetState.postValue(BottomSheetState.HIDDEN)
+       bottomSheetState.postValue(BottomSheetState.Hidden)
     }
 
     private fun collapseBottomSheet() {
-        bottomSheetState.postValue(BottomSheetState.COLLAPSED)
+        bottomSheetState.postValue(BottomSheetState.Collapsed)
     }
 
 }
