@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : PlayerInteractor {
-
     override fun prepare(url: String, listener: PlayerInteractor.OnPreparedListener) {
         playerRepository.prepare(url, object : PlayerRepository.OnPreparedListener {
             override fun onPrepared() {
@@ -40,5 +39,13 @@ class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : Pla
 
     override suspend fun isInFavorite(trackId: Int?): Flow<Boolean> {
         return playerRepository.isInFavorite(trackId)
+    }
+
+    override suspend fun isInPlaylist(trackId: Int, playlistId: Int): Flow<Boolean> {
+        return playerRepository.isInPlaylist(trackId, playlistId)
+    }
+
+    override suspend fun addToPlaylist(track: Track, playlistId: Int) {
+        playerRepository.addToPlaylist(track, playlistId)
     }
 }

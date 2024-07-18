@@ -14,7 +14,6 @@ import com.practicum.playlistmaker.utils.debounce
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
-
     private val searchState = MutableLiveData<SearchState>()
     fun getSearchState(): LiveData<SearchState> = searchState
 
@@ -24,10 +23,12 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     private val trackClickEvent = SingleEventLiveData<Track>()
     fun getTrackClickEvent(): LiveData<Track> = trackClickEvent
 
-    private val latestSearchText: String? = null
+    private var latestSearchText: String? = null
 
     fun onEditorActionDone(text: String) {
-        loadTracks(text)
+        if (text != latestSearchText) {
+            loadTracks(text)
+        }
     }
 
     fun onTrackClick(track: Track) {
@@ -37,6 +38,7 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     val onTextChangedDebounce =
         debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { text ->
             if (text != latestSearchText) {
+                latestSearchText = text
                 loadTracks(text)
             }
         }
@@ -70,31 +72,28 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
         searchState.value = SearchState.Loading
 
         viewModelScope.launch {
-            interactor
-                .search(song = song)
-                .collect { data ->
-                    when (data) {
-                        is Resource.Data -> {
-                            if (data.value.isNotEmpty()) {
-                                searchState.postValue(SearchState.Content(data.value))
-                            } else {
-                                searchState.postValue(SearchState.Error(ErrorType.EMPTY))
-                            }
-
-                        }
-
-                        is Resource.Error -> {
+            interactor.search(song = song).collect { data ->
+                when (data) {
+                    is Resource.Data -> {
+                        if (data.value.isNotEmpty()) {
+                            searchState.postValue(SearchState.Content(data.value))
+                        } else {
                             searchState.postValue(SearchState.Error(ErrorType.EMPTY))
-
                         }
+
+                    }
+
+                    is Resource.Error -> {
+                        searchState.postValue(SearchState.Error(ErrorType.EMPTY))
+
                     }
                 }
+            }
         }
 
     }
 
     companion object {
-
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 

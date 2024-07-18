@@ -7,7 +7,8 @@ import android.media.MediaPlayer
 import androidx.room.Room
 import com.google.gson.Gson
 import com.practicum.playlistmaker.data.db.AppDatabase
-import com.practicum.playlistmaker.media.data.converters.TrackDbConverter
+import com.practicum.playlistmaker.newlist.data.impl.FileServiceImpl
+import com.practicum.playlistmaker.newlist.domain.FileService
 import com.practicum.playlistmaker.search.data.entity.ItunesService
 import com.practicum.playlistmaker.search.data.impl.HistoryLocalStorageImpl
 import com.practicum.playlistmaker.search.domain.HistoryLocalStorage
@@ -51,8 +52,14 @@ val dataModule = module {
     }
 
     single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     factory { Gson() }
+
+    single<FileService> {
+        FileServiceImpl(androidContext())
+    }
 }

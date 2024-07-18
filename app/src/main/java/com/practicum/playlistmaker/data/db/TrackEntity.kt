@@ -4,19 +4,18 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
-@Entity(tableName = "favorite")
+@Entity(tableName = "track")
 data class TrackEntity(
-    @PrimaryKey(autoGenerate = true)
-    var trackId: Int = 0,
-    var trackName: String = "",
-    var artistName: String = "",
-    var trackTime: String = "",
-    var artworkUrl100: String = "",
-    var trackTimeMillis: Int = 0,
-    var collectionName: String = "",
-    var releaseDate: Date = Date(),
-    var primaryGenreName: String = "",
-    var country: String = "",
-    var previewUrl: String = "",
-    var addDate: Date = Date()
+    @PrimaryKey
+    val trackId: Int = 0,
+    val trackName: String = "",
+    val artistName: String = "",
+    val trackTime: String = "",
+    val artworkUrl100: String = "",
+    val trackTimeMillis: Int = 0,
+    val collectionName: String = "",
+    val releaseDate: Date = Date(),
+    val primaryGenreName: String = "",
+    val country: String = "",
+    val previewUrl: String = ""
 )

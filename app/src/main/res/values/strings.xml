@@ -36,5 +36,28 @@
     <string name="track_country">Страна</string>
     <string name="track_sample_time">0:30</string>
     <string name="track_null_time">00:00</string>
+    <string name="new_list_title">Новый плейлист</string>
+    <string name="new_list_name_hint">Название*</string>
+    <string name="new_list_description_hint">Описание</string>
+    <string name="create_button_title">Создать</string>
+    <string name="tracks_qty">%1$d треков</string>
+    <string name="playlist_created_message">Плейлист %1$s создан</string>
+    <string name="confirm_new_list_title">Завершить создание плейлиста?</string>
+    <string name="confirm_new_list_message">Все несохраненные данные будут потеряны</string>
+    <string name="confirm_new_list_negative_button">Отмена</string>
+    <string name="confirm_new_list_positive_button">Завершить</string>
+    <string name="add_track_playlist_title">Добавить в плейлист</string>
+    <string name="track_is_in_list_msg">Трек уже добавлен в плейлист %1s</string>
+    <string name="track_added_in_list_msg">Добавлено в плейлист %1s</string>
+
+    <plurals name="tracks">
+        <item quantity="zero">%d треков</item>
+        <item quantity="one">%d трек</item>
+        <item quantity="two">%d трека</item>
+        <item quantity="few">%d трека</item>
+        <item quantity="many">%d треков</item>
+        <item quantity="other">%d трека</item>
+    </plurals>
 
 </resources>
+
