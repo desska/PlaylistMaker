@@ -14,6 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentNewListBinding
@@ -21,11 +22,11 @@ import com.practicum.playlistmaker.media.ui.PLAYLIST_NAME
 import com.practicum.playlistmaker.newlist.domain.entity.NewListState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewListFragment : Fragment() {
+open class NewListFragment : Fragment() {
     private var _binding: FragmentNewListBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: NewListViewModel by viewModel()
-    lateinit var dialog: MaterialAlertDialogBuilder
+    protected val binding get() = _binding!!
+    protected open val viewModel: NewListViewModel by viewModel()
+    private lateinit var dialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -42,6 +43,14 @@ class NewListFragment : Fragment() {
         binding.viewmodel = viewModel
 
         binding.toolbar.setNavigationIcon(R.drawable.arrow_back)
+
+        binding.toolbar.navigationIcon?.setTint(
+            MaterialColors.getColor(
+                requireContext(),
+                com.google.android.material.R.attr.colorOnSecondary,
+                requireContext().getColor(R.color.black)
+            )
+        )
         binding.toolbar.setNavigationOnClickListener {
             viewModel.onBackPressed()
         }
@@ -51,9 +60,8 @@ class NewListFragment : Fragment() {
             }
         }
 
-
         binding.createButton.setOnClickListener {
-            viewModel.addList()
+            viewModel.saveList()
         }
 
         binding.cover.setOnClickListener {
@@ -62,8 +70,8 @@ class NewListFragment : Fragment() {
 
         viewModel.getListState().observe(this.viewLifecycleOwner) { state ->
             when (state) {
-                is NewListState.ReadyToCreate -> showReadyState()
-                is NewListState.NotReadyToCreate -> showNotReadyState()
+                is NewListState.ReadyToSave -> showReadyState()
+                is NewListState.NotReadyToSave -> showNotReadyState()
                 is NewListState.Created -> showCreatedState(state.name)
                 is NewListState.Confirm -> showConfirmDialog()
                 is NewListState.Exit -> exit()
@@ -76,7 +84,6 @@ class NewListFragment : Fragment() {
 
     }
 
-
     private fun exit() {
         findNavController().navigateUp()
     }
@@ -85,7 +92,7 @@ class NewListFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showCreatedState(playlistName: String) {
+    protected open fun showCreatedState(playlistName: String) {
         val bundle = bundleOf(PLAYLIST_NAME to playlistName)
         setFragmentResult(PLAYLIST_NAME, bundle)
         findNavController().navigateUp()
@@ -101,15 +108,15 @@ class NewListFragment : Fragment() {
         _binding = null
     }
 
-    private fun showReadyState() {
+    protected fun showReadyState() {
         binding.createButton.isEnabled = true
     }
 
-    private fun showNotReadyState() {
+    protected fun showNotReadyState() {
         binding.createButton.isEnabled = false
     }
 
-    private fun updateCover(cover: Uri?) {
+    protected fun updateCover(cover: Uri?) {
         if ((cover == null) || (cover == Uri.EMPTY)) {
             binding.cover.setImageResource(R.drawable.new_list)
             binding.cover.scaleType = ImageView.ScaleType.CENTER
@@ -119,23 +126,25 @@ class NewListFragment : Fragment() {
         }
     }
 
+    protected fun initDialog() {
+        dialog = MaterialAlertDialogBuilder(
+            requireContext(), R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog
+        ).setTitle(getString(R.string.confirm_new_list_title))
+            .setMessage(getString(R.string.confirm_new_list_message))
+            .setNegativeButton(getString(R.string.confirm_new_list_negative_button)) { _, _ ->
+                viewModel.onConfirmNegative()
+            }.setPositiveButton(R.string.confirm_new_list_positive_button) { _, _ ->
+                viewModel.onConfirmPositive()
+            }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             viewModel.onBackPressed()
         }
-        dialog = MaterialAlertDialogBuilder(
-            requireContext(),
-            R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog
-        )
-            .setTitle(getString(R.string.confirm_new_list_title))
-            .setMessage(getString(R.string.confirm_new_list_message))
-            .setNegativeButton(getString(R.string.confirm_new_list_negative_button)) { _, _ ->
-                viewModel.onConfirmNegative()
-            }
-            .setPositiveButton(R.string.confirm_new_list_positive_button) { _, _ ->
-                viewModel.onConfirmPositive()
-            }
+        initDialog()
+
     }
 
 }

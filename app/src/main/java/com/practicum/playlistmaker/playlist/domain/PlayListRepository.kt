@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlayListRepository {
     fun getLists(): Flow<List<Playlist>>
+
+    fun getList(playlistId: Int): Flow<Playlist>
 }

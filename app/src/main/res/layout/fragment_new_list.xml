@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/toolbar_title"
                 style="@style/MainToolbarTextView"
                 android:text="@string/new_list_title" />
 
@@ -84,6 +85,7 @@
                 style="@style/newListTextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onTextChanged="@{viewmodel.onDescriptionTextChanged}"
                 android:text="@={viewmodel.descriptionState}" />
 
         </com.google.android.material.textfield.TextInputLayout>

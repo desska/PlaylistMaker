@@ -22,4 +22,11 @@ class PlaylistRepositoryImpl(
         }.flowOn(Dispatchers.IO)
     }
 
+    override fun getList(playlistId: Int): Flow<Playlist> {
+        return flow {
+            val entity = appDatabase.playlistDao().getList(playlistId)
+            emit(converter.map(entity))
+        }.flowOn(Dispatchers.IO)
+    }
+
 }

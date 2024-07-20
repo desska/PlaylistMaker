@@ -10,25 +10,26 @@ import com.practicum.playlistmaker.newlist.domain.entity.NewListState
 import com.practicum.playlistmaker.newlist.domain.entity.Playlist
 import kotlinx.coroutines.launch
 
-class NewListViewModel(private val interactor: NewListInteractor) : ViewModel() {
-    private val listState = MutableLiveData<NewListState>(NewListState.NotReadyToCreate)
+open class NewListViewModel(private val interactor: NewListInteractor) : ViewModel() {
+    protected val listState = MutableLiveData<NewListState>(NewListState.NotReadyToSave)
     fun getListState(): LiveData<NewListState> = listState
 
-    private val coverState = MutableLiveData<Uri?>(null)
+    protected val coverState = MutableLiveData<Uri?>(null)
     fun getCoverState(): LiveData<Uri?> = coverState
 
     val descriptionState = MutableLiveData<String>()
     val nameState = MutableLiveData<String>()
 
+    open fun onNameTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        listState.value = if (p0?.isEmpty() == true) {
+            NewListState.NotReadyToSave
+        } else {
+            NewListState.ReadyToSave
+        }
+    }
 
+    open fun onDescriptionTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-    fun onNameTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        listState.value =
-            if (p0?.isEmpty() == true) {
-                NewListState.NotReadyToCreate
-            } else {
-                NewListState.ReadyToCreate
-            }
     }
 
     fun onBackPressed() {
@@ -45,31 +46,36 @@ class NewListViewModel(private val interactor: NewListInteractor) : ViewModel() 
 
     fun onConfirmNegative() {
         listState.value = if (nameState.value.isNullOrEmpty()) {
-            NewListState.NotReadyToCreate
+            NewListState.NotReadyToSave
         } else {
-            NewListState.ReadyToCreate
+            NewListState.ReadyToSave
         }
     }
 
-    fun onCoverChanged(cover: Uri?) {
+    open fun onCoverChanged(cover: Uri?) {
         coverState.value = cover
     }
 
-    fun addList() {
+    protected open fun getListToSave(): Playlist {
+        val name = nameState.value ?: ""
+        return Playlist(
+            name = name,
+            description = descriptionState.value ?: "",
+            cover = if (coverState.value == null) {
+                ""
+            } else {
+                coverState.value.toString()
+            }
+        )
+    }
+
+    fun saveList() {
         viewModelScope.launch {
-            val name = nameState.value ?: ""
+            val playlist = getListToSave()
             interactor.addList(
-                Playlist(
-                    name = name,
-                    description = descriptionState.value ?: "",
-                    cover = if (coverState.value == null) {
-                        ""
-                    } else {
-                        coverState.value.toString()
-                    }
-                )
+                playlist
             )
-            listState.value = NewListState.Created(name)
+            listState.value = NewListState.Created(playlist.name)
         }
 
     }

@@ -13,6 +13,6 @@
         <item name="customTextColor">@color/yp_white</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="playerBtnBackgroundColor">@color/yp_dark_gray</item>
-
+        <item name="customColor">@color/yp_white</item>
     </style>
 </resources>

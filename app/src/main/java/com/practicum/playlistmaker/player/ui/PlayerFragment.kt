@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.color.MaterialColors
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.media.ui.PLAYLIST_NAME
@@ -80,6 +81,13 @@ class PlayerFragment : Fragment() {
         trackInfo = TrackMapper.map(track)
 
         binding.playerToolbar.setNavigationIcon(R.drawable.arrow_back)
+        binding.playerToolbar.navigationIcon?.setTint(
+            MaterialColors.getColor(
+                requireContext(),
+                com.google.android.material.R.attr.colorOnSecondary,
+                requireContext().getColor(R.color.black)
+            )
+        )
         binding.playerToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }

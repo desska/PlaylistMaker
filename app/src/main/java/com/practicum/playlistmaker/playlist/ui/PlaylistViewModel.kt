@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.newlist.domain.entity.Playlist
+import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.domain.entity.PlaylistErrorType
 import com.practicum.playlistmaker.playlist.domain.entity.PlaylistState
@@ -15,6 +16,9 @@ class PlaylistViewModel(private val interactor: PlaylistInteractor) : ViewModel(
     private val state =
         MutableLiveData<PlaylistState>()
 
+    private val playlistClickEvent = SingleEventLiveData<Playlist>()
+    fun observePlaylistClickEvent(): LiveData<Playlist> = playlistClickEvent
+
     fun observeState(): LiveData<PlaylistState> = state
 
     private val newListClickEvent = SingleEventLiveData<Boolean>()
@@ -22,6 +26,10 @@ class PlaylistViewModel(private val interactor: PlaylistInteractor) : ViewModel(
 
     fun onCreateListClick() {
         newListClickEvent.postValue(true)
+    }
+
+    fun onPlaylistClick(playlist: Playlist) {
+        playlistClickEvent.value = playlist
     }
 
     fun fillData() {

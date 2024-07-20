@@ -67,7 +67,7 @@ class PlayerRepositoryImpl(
 
     override suspend fun isInPlaylist(trackId: Int, playlistId: Int): Flow<Boolean> {
         return flow {
-            val list = appDatabase.playlistDao().getTracks(playlistId)
+            val list = appDatabase.playlistDao().getTracksId(playlistId)
             emit(list.find { it == trackId } != null)
         }.flowOn(Dispatchers.IO)
 

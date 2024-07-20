@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistInteractor {
     suspend fun getLists(): Flow<List<Playlist>>
+
+    suspend fun getList(playlistId: Int): Flow<Playlist>
 }

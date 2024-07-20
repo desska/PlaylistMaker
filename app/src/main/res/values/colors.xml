@@ -11,4 +11,5 @@
     <color name="yp_dark_gray">#535459</color>
     <color name="yp_purple">#6200EE</color>
     <color name="alpha_gray">#401A1B22</color>
+    <color name="alpha_gray_half">#801A1B22</color>
 </resources>

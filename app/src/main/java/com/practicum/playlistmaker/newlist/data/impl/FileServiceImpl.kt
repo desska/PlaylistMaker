@@ -16,6 +16,10 @@ class FileServiceImpl(private val context: Context) : FileService {
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), DIRECTORY)
         if (!filePath.exists()) {
             filePath.mkdirs()
+        } else {
+            if (path.indexOf(filePath.toString()) != -1) {
+                return path
+            }
         }
         val file = File.createTempFile(FILE_PREFIX, FILE_SUFFIX, filePath)
         val inputStream = context.contentResolver.openInputStream(uri)
