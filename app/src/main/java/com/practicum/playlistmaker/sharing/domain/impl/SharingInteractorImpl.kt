@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.sharing.domain.impl
 import com.practicum.playlistmaker.sharing.domain.ExternalNavigator
 import com.practicum.playlistmaker.sharing.domain.SharingInteractor
 
-class SharingInteractorImpl(val navigator: ExternalNavigator) :
+class SharingInteractorImpl(private val navigator: ExternalNavigator) :
     SharingInteractor {
 
     override fun share() = navigator.share(navigator.getShareUrl())

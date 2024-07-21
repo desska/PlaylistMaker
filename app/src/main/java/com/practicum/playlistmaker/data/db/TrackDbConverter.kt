@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker.data.db
 
 import com.practicum.playlistmaker.player.domain.entity.Track
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 open class TrackDbConverter {
     fun map(track: Track): TrackEntity {
@@ -25,7 +27,9 @@ open class TrackDbConverter {
             trackId = track.trackId,
             trackName = track.trackName,
             artistName = track.artistName,
-            trackTime = track.trackTime, artworkUrl100 = track.artworkUrl100,
+            trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+                .trimStart('0'),
+            artworkUrl100 = track.artworkUrl100,
             trackTimeMillis = track.trackTimeMillis,
             collectionName = track.collectionName,
             releaseDate = track.releaseDate,

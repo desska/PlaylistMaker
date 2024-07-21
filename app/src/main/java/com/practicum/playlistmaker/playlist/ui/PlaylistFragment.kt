@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,7 @@ import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.newlist.domain.entity.Playlist
 import com.practicum.playlistmaker.playlist.domain.entity.PlaylistErrorType
 import com.practicum.playlistmaker.playlist.domain.entity.PlaylistState
+import com.practicum.playlistmaker.search.ui.PLAYER_TRACKS_KEY
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
@@ -38,7 +40,11 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
         configuration.setLocale(Locale("ru"))
         val localeContext = this.requireContext().createConfigurationContext(configuration)
 
-        adapter = PlaylistAdapter(localeContext)
+        adapter = PlaylistAdapter(localeContext) { playlist: Playlist ->
+            viewModel.onPlaylistClick(
+                playlist
+            )
+        }
         binding.list.adapter = adapter
         binding.list.layoutManager = GridLayoutManager(this.requireContext(), COLUMNS_QTY)
 
@@ -55,6 +61,10 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
                 is PlaylistState.Error -> showError(it.type)
                 is PlaylistState.Content -> showContent(it.data)
             }
+        }
+
+        viewModel.observePlaylistClickEvent().observe(viewLifecycleOwner) {
+            openPlaylist(playlist = it)
         }
 
     }
@@ -93,9 +103,18 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
         }
     }
 
+    private fun openPlaylist(playlist: Playlist) {
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_editTracks, bundleOf(
+                PLAYLIST_KEY to playlist.id
+            )
+        )
+    }
+
     companion object {
         fun newInstance() = PlaylistFragment()
         const val COLUMNS_QTY = 2
+        const val PLAYLIST_KEY = "playlist"
 
     }
 }
