@@ -25,10 +25,12 @@ class RootActivity : AppCompatActivity() {
             when (dest.id) {
                 R.id.newList, R.id.player, R.id.editListFragment, R.id.editTracksFragment -> {
                     binding.bottomNav.isVisible = false
+                    binding.divider.isVisible = false
                 }
 
                 else -> {
                     binding.bottomNav.isVisible = true
+                    binding.divider.isVisible = true
                 }
             }
         }
